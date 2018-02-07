@@ -1,7 +1,0 @@
-
-auto poni1
-iface poni1 inet static
-	address poni2
-	netmask poni3
-	network poni4
-	gateway poni5

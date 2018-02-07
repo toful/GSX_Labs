@@ -1,14 +1,13 @@
 #!/bin/bash
 
 #####################################################################################
-# Autors: Cristòfol Daudèn i Aleix Mariné											#
-# Data d'implementació: 7/2/2018													#
-# Versió 1.0																		#
-# Aquest script necessita permisos per a modificar el fitxer rebut per              #
-# paràmetre                                                                         #
-# Descripció i paràmetres: Aquest script buida el fitxer rebut per paràmetre		#
-# - Argument 1: Ruta completa fins al fitxer									 	#
-#####################################################################################
+# Autors: Cristòfol Daudèn i Aleix Marine                                           #
+# Data d'implementació: 7/2/2018                                                    #
+# Versio 1.0                                                                        #
+# Aquest script necessita permisos per a modificar el fitxer rebut per paràmetre.   # 
+# Si no existeix, el crearà buit.                                                   #
+# Descripció i paràmetres: Aquest script buida el fitxer rebut per paràmetre        #
+# - Argument 1: Ruta completa fins al fitxer                                        #					#####################################################################################
 
 function ayuda {
 	echo "
@@ -18,7 +17,8 @@ function ayuda {
 # Versió 1.0                                                                  #
 # Aquest script necessita permisos per a modificar el fitxer rebut per        #
 # paràmetre.                                                                  #
-# Descripció i paràmetres: Aquest script buida el fitxer rebut per paràmetre  #
+# Descripció i paràmetres: Aquest script buida el fitxer rebut per paràmetre. #
+# Si no existeix, el crearà buit.                                             #
 # - Argument 1: Ruta completa fins al fitxer                                  #
 ###############################################################################
 "
