@@ -60,6 +60,7 @@ do
 
 	else
 		echo ERROR, el fitxer $path ja no existeix
+		echo ERROR, el fitxer $path ja no existeix >&2
 	fi
 done
 exit 0
