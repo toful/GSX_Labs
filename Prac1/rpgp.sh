@@ -29,7 +29,7 @@ do
 		then
 			echo S'ha detectat que s'han modificat els permisos, els vols tornar al seu estat anterior: $perm?"(S/N)"
 			read r
-			if [ r='S' -o r='s' ]
+			if [ r = 'S' -o r = 's' ]
 			then
 				chmod $perm $path
 				echo "S'han modificat els permisos a:" $perm
@@ -40,10 +40,15 @@ do
 		then
 			echo S'ha detectat que s'ha modificat el propietari, el vols tornar al seu estat anterior: $user"(S/N)"
 			read r
-			if [ r='S' -o r='s' ]
+			if [ r = 'S' -o r = 's' ]
 			then
-				chown $user $path
-				echo "S'ha modificat el propietari a:" $user
+				if [ $(whoami) != "root" ]
+				then
+					echo Per poder canviar el propierari del fitxer necessites permisos de root
+				else
+					chown $user $path
+					echo "S'ha modificat el propietari a:" $user
+				fi
 			fi
 		fi
 
@@ -51,10 +56,15 @@ do
 		then
 			echo S'ha detectat que s'han modificat el grup, el vols tornar al seu estat anterior: $group?"(S/N)"
 			read r
-			if [ r='S' -o r='s' ]
+			if [ r = 'S' -o r = 's' ]
 			then
-				chgrp $group $path
-				echo "S'ha modificat el grup a:" $group
+				if [ $(whoami) != "root" ]
+				then
+					echo Per poder canviar el grup del fitxer necessites permisos de root
+				else
+					chgrp $group $path
+					echo "S'ha modificat el grup a:" $group
+				fi
 			fi
 		fi
 

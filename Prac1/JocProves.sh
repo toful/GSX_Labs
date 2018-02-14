@@ -49,9 +49,10 @@ cat std.err
 #changing the access rights in a.txt file and removing the d.txt file
 chmod u+x JocProves/a.txt
 rm JocProves/d.txt
+chown root JocProves/b.txt
 
 echo
-echo Correm el script rpgp.sh amb la sortida de gpgp.sh havent modificat el fitxer a.txt:
+echo Correm el script rpgp.sh amb la sortida de gpgp.sh havent modificat el fitxer a.txt i b.txt i borrat el d.txt:
 #running rpgp.sh
 ./rpgp.sh std.out 2> std.err
 #cat std.err
