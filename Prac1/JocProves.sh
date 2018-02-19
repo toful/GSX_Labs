@@ -59,3 +59,31 @@ echo Correm el script rpgp.sh amb la sortida de gpgp.sh havent modificat el fitx
 
 #removing all test files
 rm -R JocProves
+
+# Proves aif.sh
+./aif.sh -h # mostrem l'ajuda
+./aif.sh > std.out 2> std.err # sense arguments mostrem l'ajuda degut a error per falta d'arguments
+./aif.sh 1 2 3 4 5 # amb arguments -> Si tenim permisos per modificiar /etc/network/interfaces s'instalara una nova interficie, sino permis denegat
+cat /etc/network/interfaces 
+
+# Proves bfit.sh
+./bfit.sh -h # mostrem l'ajuda
+./bfit.sh > std.out 2> std.err # sense arguments mostrem l'ajuda degut a error per falta d'arguments
+cat std.out
+./bfit.sh 4 5 > std.out 2> std.err # passem dos arguments
+ls -l # Comprovem que s'ha creat el fitxer 4
+echo "some data" > data
+cat data
+./bfit.sh data # buidem el fitxer data
+cat data # cmproem que data esta buuit
+echo "more  data" > /home/$(whoami)/fitxer
+cat /home/$(whoami)/fitxer
+./bfit.sh /home/$(whoami)/fitxer
+cat /home/$(whoami)/fitxer # Comprovem que el fitxer esta buit
+
+# eliminem les proves
+rm /home/$(whoami)/fitxer
+rm data
+rm 4
+rm std.err
+rm std.out

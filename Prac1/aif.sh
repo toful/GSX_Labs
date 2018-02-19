@@ -4,6 +4,9 @@
 # Autors: Cristòfol Daudèn i Aleix Mariné											#
 # Data d'implementació: 7/2/2018													#
 # Versió 1.0																		#
+# Permisos: L'usuari que executa l'script necesita permisos per a modificar el      #
+# fitxer /etc/network/interfaces, que normalment posseeix l'usuari root, pel que    # 
+# resulta gairebé imprescindible ser un usuari amb privilegis per a que funcioni.   #  
 # Descripció i paràmetres: Aquest script configura una nova interfície de xarxa,    #
 # afegint al fitxer /etc/network/interfaces la informació necessaria. Aquesta info  #
 # serà aportada pels paràmetres de la següent manera:								#
@@ -20,6 +23,10 @@ function ayuda {
 # Autors: Cristòfol Daudèn i Aleix Mariné                                     #
 # Data d'implementació: 7/2/2018                                              #
 # Versió 1.0                                                                  #
+# Permisos: L'usuari que executa l'script necesita permisos per a modificar   #
+# el fitxer /etc/network/interfaces, que normalment posseeix l'usuari root,   #
+# pel que resulta gairebé imprescindible ser un usuari amb privilegis per a   #
+# que funcioni.                                                               #  
 # Descripció i paràmetres: Aquest script configura una nova interfície de     #
 # xarxa, afegint al fitxer /etc/network/interfaces la informació necessaria.  #
 # Aquesta info serà aportada pels paràmetres de la següent manera:            #
@@ -41,6 +48,6 @@ if [ $# -lt 5 ]; then
 	ayuda
 	exit 1
 else
-	echo -e "\nauto $1\niface $1 inet static\n\taddress $2\n\tnetmask $3\n\tnetwork $4\n\tgateway $5" >> interfaces 
+	echo -e "\nauto $1\niface $1 inet static\n\taddress $2\n\tnetmask $3\n\tnetwork $4\n\tgateway $5" >> /etc/network/interfaces
 	exit 0
 fi

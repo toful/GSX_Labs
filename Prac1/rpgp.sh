@@ -1,13 +1,45 @@
 #!/bin/bash
-#Authors:	Crstòfol Daudén Esmel i Aleix Mariné Tena
-#Date:		07-02-2018
-#Version:	1.0
-#Description:	Mira si s'ha canviat algún dels atributs del fitxers descrits en l'argument d'entrada i dona la possibilitat de tornar al seu estat inicial
-#Arg 1:		Fitxer amb el nom(path absolut), propietari, grup i permisos de X fitxers
+
+#####################################################################################
+# Autors: Cristòfol Daudèn i Aleix Marine                                           #
+# Data d'implementació: 7/2/2018                                                    #
+# Versio 1.0                                                                        #
+# Permisos: Aquest script necessita permisos per a llegir el fitxer rebut per       #
+# paràmetre i permisos per a modificar els permisos dels fitxers indicats a dins    #
+# del fitxer rebut per paràmetre (si s'escau)                                       #
+# Descripció i paràmetres: Mira si s'ha canviat algún dels atributs del fitxers     #
+# descrits en l'argument d'entrada i dona la possibilitat de tornar al seu estat    #
+# inicial.                                                                          #
+# -Arg1: Fitxer amb el nom(path absolut), propietari, grup i permisos de X fitxers. #
+#####################################################################################
+
+function ayuda {
+	echo "
+###############################################################################
+# Autors: Cristòfol Daudèn i Aleix Mariné                                     #
+# Data d'implementació: 7/2/2018                                              #
+# Versió 1.0                                                                  #
+# Permisos: Aquest script necessita permisos per a llegir el fitxer rebut per #
+# paràmetre i permisos per a modificar els permisos dels fitxers indicats a   #
+# dins del fitxer rebut per paràmetre (si s'escau).                           #
+# Descripció i paràmetres: Mira si s'ha canviat algún dels atributs del       #
+# fitxers descrits en l'argument d'entrada i dona la possibilitat de tornar al#
+# seu estat inicial.                                                          #
+# -Arg1: Fitxer amb el nom(path absolut), propietari, grup i permisos de X    #
+# fitxers.                                                                    #
+###############################################################################
+"
+}
+
+if [ "$1" = "-h" ]; then
+	ayuda
+	exit 0
+fi
 
 if [ $# -lt 1 ]
 then
-	echo ERROR, no file as an argument >&2
+	echo "ERROR, no file as an argument"
+	ayuda
 	exit 1
 fi
 
@@ -70,7 +102,7 @@ do
 
 	else
 		echo ERROR, el fitxer $path ja no existeix
-		echo ERROR, el fitxer $path ja no existeix >&2
+		ayuda
 	fi
 done
 exit 0
