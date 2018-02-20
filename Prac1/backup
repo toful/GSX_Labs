@@ -20,13 +20,34 @@ DESC="backup service"
 NAME=backup
 SCRIPTNAME=/etc/init.d/"$NAME"
 
+
 for user in $(/home/)
 do
-	#comprovem que no hi hagi una backup del mateix dia de l'usuari
+	#comprovem que no hi hagi un backup del mateix dia de l'usuari
 	if [ -e /back/$user/$(date +%y%m%d) ]
 	then
-		#comprovem si hi ha un backup d'un dia anterior
+		#cas en que ja s'ha fet un backup aquest dia
+		echo "Avui ja s'ha fet una copa de seguretat de l'usuari $user" >&2
+	else
+		if [ -d /back/$user ]
+		then
+			if [ $(ls -l /back/$user/ | wc -l) -gt 1 ]
+			then
+				#cas en que hi ha un backup d'un dia anterior
+				#obtenim el nom de l'últim backup realitzat
+				anterior=$(ls -l /back/$user/ | sed -n '2p' | cut -d ' ' -f9 )
+				#comprimim aquells fitxers que s'han actualitzat des de l'´ultim backup
+				tar -czvf $(date +%y%m%d).tar.gz -T $(find /home/$user/ -newer /back/$user/$anterior)
 
-			#date +%y%m%d 
-
+			else
+				#cas en que ancara no hi ha cap backup
+				tar -czvf /back/$user/$(date +%y%m%d).tar.gz /home/$user 
+			fi
+		else
+			#Cas en que no hi ha cap carpeta amb el nom de l'usuari
+			mkdir /back/$user
+			tar -czvf /back/$user/$(date +%y%m%d).tar.gz /home/$user
+		fi
+	fi
 done
+

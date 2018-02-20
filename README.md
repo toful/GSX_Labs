@@ -30,11 +30,11 @@ systemctl comanda application.service
 systemctl daemon-reload
 
 per canviar el runlevel:
-systemctl 	get-default
-			halt
-			rescue
-			poweroff
-			reboot
+systemctl get-default
+		halt
+		rescue
+		poweroff
+		reboot
 systemctl set-default multi-user.target | graphical.target
 systemctl list-dependencies multi-user.target
 
