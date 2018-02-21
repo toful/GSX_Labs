@@ -38,7 +38,7 @@ fi
 
 if [ $# -lt 1 ]
 then
-	echo "ERROR, no file as an argument"
+	echo "ERROR, no file as an argument" >&2
 	ayuda
 	exit 1
 fi
@@ -99,10 +99,8 @@ do
 				fi
 			fi
 		fi
-
 	else
-		echo ERROR, el fitxer $path ja no existeix
-		ayuda
+		echo ERROR, el fitxer $path ja no existeix >&2
 	fi
 done
 exit 0

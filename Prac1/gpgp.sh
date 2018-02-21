@@ -36,7 +36,7 @@ fi
 
 if [ $# -lt 1 ]
 then 
-	echo "ERROR, no file detected"
+	echo "ERROR, no file detected" >&2
 	ayuda
 	exit 1
 fi

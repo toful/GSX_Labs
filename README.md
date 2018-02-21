@@ -31,12 +31,16 @@ systemctl daemon-reload
 
 per canviar el runlevel:
 systemctl get-default
-		halt
+		halt -->para
 		rescue
 		poweroff
 		reboot
 systemctl set-default multi-user.target | graphical.target
 systemctl list-dependencies multi-user.target
+
+telint [valor numeric]
+
+per iniciar el terminal ctrl + Alt + F1
 
 tar:
 	-és recursiu si no li indiquem lo contrari

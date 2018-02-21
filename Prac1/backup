@@ -7,8 +7,8 @@
 # Required-Stop:     $remote_fs $syslog $time
 # Should-Start:      $network $named slapd autofs ypbind nscd nslcd winbind
 # Should-Stop:       $network $named slapd autofs ypbind nscd nslcd winbind
-# Default-Start:
-# Default-Stop:		 3
+# Default-Start:	 0,6
+# Default-Stop:		 
 # Short-Description: Backup service program
 # Description:       backup is a program that runs when the machine is shutted
 #					 down creating a compressed system backup for every user in
@@ -20,34 +20,45 @@ DESC="backup service"
 NAME=backup
 SCRIPTNAME=/etc/init.d/"$NAME"
 
-
-for user in $(/home/)
-do
-	#comprovem que no hi hagi un backup del mateix dia de l'usuari
-	if [ -e /back/$user/$(date +%y%m%d) ]
-	then
-		#cas en que ja s'ha fet un backup aquest dia
-		echo "Avui ja s'ha fet una copa de seguretat de l'usuari $user" >&2
-	else
-		if [ -d /back/$user ]
+#comprovem que l'estat d'rigen sigui l'estat 3
+if [ $(runlevel | cut -d ' ' -f1) -eq 5 ]
+then
+	#per tots els usuaris en la carpeta /home/:
+	for user in $(ls /home/)
+	do
+		#comprovem que sigui un usuari 
+		id $user > /dev/null >&2
+		if [ $? -eq 0 ]
 		then
-			if [ $(ls -l /back/$user/ | wc -l) -gt 1 ]
+			#comprovem que no hi hagi un backup del mateix dia de l'usuari
+			if [ -e /back/$user/$(date +%y%m%d) ]
 			then
-				#cas en que hi ha un backup d'un dia anterior
-				#obtenim el nom de l'últim backup realitzat
-				anterior=$(ls -l /back/$user/ | sed -n '2p' | cut -d ' ' -f9 )
-				#comprimim aquells fitxers que s'han actualitzat des de l'´ultim backup
-				tar -czvf $(date +%y%m%d).tar.gz -T $(find /home/$user/ -newer /back/$user/$anterior)
-
+				#cas en que ja s'ha fet un backup aquest dia
+				echo "Avui ja s'ha fet una copa de seguretat de l'usuari $user" >&2
 			else
-				#cas en que ancara no hi ha cap backup
-				tar -czvf /back/$user/$(date +%y%m%d).tar.gz /home/$user 
-			fi
-		else
-			#Cas en que no hi ha cap carpeta amb el nom de l'usuari
-			mkdir /back/$user
-			tar -czvf /back/$user/$(date +%y%m%d).tar.gz /home/$user
-		fi
-	fi
-done
+				if [ -d /back/$user ]
+				then
+					if [ $(ls -l /back/$user/ | wc -l) -gt 1 ]
+					then
+						#cas en que hi ha un backup d'un dia anterior
+						#obtenim el nom de l'últim backup realitzat
+						anterior=$(ls -l /back/$user/ | sed -n '2p' | cut -d ' ' -f9 )
+						#comprimim aquells fitxers que s'han actualitzat des de l'´ultim backup
+						find /home/$user/ -newer /back/$user/$anterior > /tmp/new_files.txt
+						tar -czf /back/$user/$(date +%y%m%d).tar.gz -T /tmp/new_files.txt
+						chmod 700 /back/$user/$(date +%y%m%d).tar.gz
+						chown $user:$user /back/$user/$(date +%y%m%d).tar.gz
 
+					else
+						#cas en que ancara no hi ha cap backup
+						tar -czf /back/$user/$(date +%y%m%d).tar.gz /home/$user 
+					fi
+				else
+					#Cas en que no hi ha cap carpeta amb el nom de l'usuari
+					mkdir /back/$user
+					tar -czf /back/$user/$(date +%y%m%d).tar.gz /home/$user
+				fi
+			fi
+		fi
+	done
+fi
