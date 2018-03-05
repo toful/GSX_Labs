@@ -33,6 +33,9 @@ config="auto lo\niface lo inet loopback
 #escribim canvis en el fitxer /etc/network/interfaces
 echo -e $config > /etc/network/interfaces
 
+#Afegim les rutes que calguin
+#echo "up ip route add ip1/mask via ip2/mask dev <inteface> >> /etc/network/interfaces"
+
 #Activem el forwarding
 echo 1 >/proc/sys/net/ipv4/ip_forward
 
