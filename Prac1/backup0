@@ -1,24 +1,4 @@
 #!/bin/sh
-# Start/stop the backup service.
-#
-### BEGIN INIT INFO
-# Provides:          backup
-# Required-Start:    $remote_fs $syslog $time
-# Required-Stop:     $remote_fs $syslog $time
-# Should-Start:      $network $named slapd autofs ypbind nscd nslcd winbind
-# Should-Stop:       $network $named slapd autofs ypbind nscd nslcd winbind
-# Default-Start:	 0,6
-# Default-Stop:		 
-# Short-Description: Backup service program
-# Description:       backup is a program that runs when the machine is shutted
-#					 down creating a compressed system backup for every user in
-#					 the system.
-### END INIT INFO
-
-PATH=/bin:/usr/bin:/sbin:/usr/sbin
-DESC="backup service"
-NAME=backup
-SCRIPTNAME=/etc/init.d/"$NAME"
 
 #comprovem que l'estat d'rigen sigui l'estat 3
 if [ $(runlevel | cut -d ' ' -f1) -eq 5 ]
@@ -26,6 +6,7 @@ then
 	#per tots els usuaris en la carpeta /home/:
 	for user in $(more /etc/passwd | cut -d ":" -f1)
 	do
+		echo "S'executa el codi amb usuari $user" >> /home/milax/execucio.txt
 		#comprovem que sigui un usuari 
 		id $user > /dev/null >&2
 		if [ $? -eq 0 ]
@@ -43,7 +24,7 @@ then
 						#cas en que hi ha un backup d'un dia anterior
 						#obtenim el nom de l'últim backup realitzat
 						anterior=$(ls -l /back/$user/ | sed -n '2p' | cut -d ' ' -f9 )
-						#comprimim aquells fitxers que s'han actualitzat des de l'´ultim backup
+						#comprimim aquells fitxers que s'han actualitzat des de l'últim backup
 						find /home -user $user -newer /back/$user/$anterior > /tmp/new_files.txt
 						tar -czf /back/$user/$(date +%y%m%d).tar.gz -T /tmp/new_files.txt
 						chmod 700 /back/$user/$(date +%y%m%d).tar.gz
@@ -55,7 +36,7 @@ then
 					fi
 				else
 					#Cas en que no hi ha cap carpeta amb el nom de l'usuari
-					mkdir /back/$user
+					mkdir -p /back/$user
 					find /home -user $user > /tmp/new_files.txt
 					tar -czf /back/$user/$(date +%y%m%d).tar.gz -T /tmp/new_files.txt
 				fi
