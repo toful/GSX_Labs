@@ -52,7 +52,7 @@ find
 
 Toful:
 buscar que és: iio-sensor-prox i quin servei l'engega
-
+systemctl disable iio-sensor-proxy
 
 
 

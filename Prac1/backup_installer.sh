@@ -27,7 +27,7 @@ if [ "$1" = "-h" ]; then
 	exit 0
 fi
 
-cp backup /etc/init.d/backup
-systemctl enable backup
-systemctl start backup
-systemctl status backup
+cp backup0 /etc/init.d/backup0
+systemctl enable backup0
+systemctl start backup0
+systemctl status backup0
