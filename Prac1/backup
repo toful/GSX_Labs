@@ -7,7 +7,7 @@
 # Required-Stop:     $remote_fs $syslog $time
 # Should-Start:
 # Should-Stop:       0,6
-# Default-Start:	2,3,4,5 
+# Default-Start:	3
 # Default-Stop:		0,6 
 # Short-Description: Backup service program
 # Description:		backup is a program that runs when the machine is shutted

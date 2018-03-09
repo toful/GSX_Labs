@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #####################################################################################
-# Autors: Cristòfol Daudèn i Aleix Marine                                           #
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marin                              #
 # Data d'implementació: 7/2/2018                                                    #
 # Versio 1.0                                                                        #
 # Permisos: Aquest script necessita permisos per a llegir el fitxer rebut per       #
@@ -16,7 +16,7 @@
 function ayuda {
 	echo "
 ###############################################################################
-# Autors: Cristòfol Daudèn i Aleix Mariné                                     #
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marin                        #
 # Data d'implementació: 7/2/2018                                              #
 # Versió 1.0                                                                  #
 # Permisos: Aquest script necessita permisos per a llegir el fitxer rebut per #
@@ -35,14 +35,22 @@ if [ "$1" = "-h" ]; then
 	ayuda
 	exit 0
 fi
-
+#comprovem que es passi un argument com a entrada
 if [ $# -lt 1 ]
 then
 	echo "ERROR, no file as an argument" >&2
 	ayuda
 	exit 1
 fi
+#comprovem que l'argument d'entrada sigui un fitxer
+if [ ! -f "$1" ]
+then
+  echo "ERROR, parameter is not a file" >&2 
+  ayuda
+  exit 1
+fi
 
+#per tots els paths en el fitxer d'entrada:
 IFS=$'\n'
 for file in $(cat $1)
 do
@@ -59,48 +67,49 @@ do
 
 		if [ $(stat -c "%a" $path) != $perm ]
 		then
-			echo S'ha detectat que s'han modificat els permisos, els vols tornar al seu estat anterior: $perm?"(S/N)"
+			echo "S'ha detectat que s'han modificat els permisos, els vols tornar al seu estat anterior: $perm? (S/N)"
 			read r
-			if [ r = 'S' -o r = 's' ]
+			if [ $r = 'S' -o $r = 's' ]
 			then
 				chmod $perm $path
-				echo "S'han modificat els permisos a:" $perm
+				echo "S'han modificat els permisos a: $perm"
 			fi
 		fi
 
 		if [ $(stat -c "%U" $path) != $user ]
 		then
-			echo S'ha detectat que s'ha modificat el propietari, el vols tornar al seu estat anterior: $user"(S/N)"
+			echo "S'ha detectat que s'ha modificat el propietari, el vols tornar al seu estat anterior: $user (S/N)"
 			read r
-			if [ r = 'S' -o r = 's' ]
+			if [ $r = 'S' -o $r = 's' ]
 			then
 				if [ $(whoami) != "root" ]
 				then
-					echo Per poder canviar el propierari del fitxer necessites permisos de root
+					echo "Per poder canviar el propierari del fitxer necessites permisos de root" >&2
 				else
 					chown $user $path
-					echo "S'ha modificat el propietari a:" $user
+					echo "S'ha modificat el propietari a: $user"
 				fi
 			fi
+			echo "S'ha modificat el propietari a: $user $(ls -l $path)"
 		fi
 
 		if [ $(stat -c "%G" $path) != $group ]
 		then
-			echo S'ha detectat que s'han modificat el grup, el vols tornar al seu estat anterior: $group?"(S/N)"
+			echo "S'ha detectat que s'han modificat el grup, el vols tornar al seu estat anterior: $group? (S/N)"
 			read r
 			if [ r = 'S' -o r = 's' ]
 			then
 				if [ $(whoami) != "root" ]
 				then
-					echo Per poder canviar el grup del fitxer necessites permisos de root
+					echo "Per poder canviar el grup del fitxer necessites permisos de root" >&2
 				else
 					chgrp $group $path
-					echo "S'ha modificat el grup a:" $group
+					echo "S'ha modificat el grup a: $group"
 				fi
 			fi
 		fi
 	else
-		echo ERROR, el fitxer $path ja no existeix >&2
+		echo "ERROR, el fitxer $path ja no existeix" >&2
 	fi
 done
 exit 0

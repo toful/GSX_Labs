@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #####################################################################################
-# Autors: Cristòfol Daudèn i Aleix Marine                                           #
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marin                              #
 # Data d'implementació: 7/2/2018                                                    #
 # Versio 1.0                                                                        #
 # Permisos: Aquest script necessita permisos per a llegir el fitxer rebut per       #
@@ -15,7 +15,7 @@
 function ayuda {
 	echo "
 ###############################################################################
-# Autors: Cristòfol Daudèn i Aleix Mariné                                     #
+# Autors: Cristòfol Daudèn i Aleix Mariné i Josep Marin                       #
 # Data d'implementació: 7/2/2018                                              #
 # Versió 1.0                                                                  #
 # Permisos: Aquest script necessita permisos per a llegir el fitxer rebut per #
@@ -39,6 +39,13 @@ then
 	echo "ERROR, no file detected" >&2
 	ayuda
 	exit 1
+fi
+
+if [ ! -f "$1" ]
+then
+  echo "ERROR, parameter is not a file" >&2 
+  ayuda
+  exit 1
 fi
 
 IFS=$'\n'
