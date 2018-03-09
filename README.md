@@ -5,7 +5,7 @@ Per saber el nivell en el que ens trobem:
 	who -r
 	sudo runlevel
 
-Amb els DEAMOS:
+Amb els DEAMONS:
 	-sempre hem de declarar el PATH
 	-un punt seguit d'un espai en blanc, farà que s'executi l'script en la mateixa shell (no crea un entorn nou)
 
@@ -52,7 +52,7 @@ find
 
 Toful:
 buscar que és: iio-sensor-prox i quin servei l'engega
-
+systemctl disable iio-sensor-proxy
 
 
 
