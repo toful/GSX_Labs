@@ -24,7 +24,7 @@ backup_service(){
 	echo "S'executa el codi $(date)" > /home/milax/execucio.txt
 	echo "runlevel: $(runlevel)" >> /home/milax/execucio.txt
 	#comprovem que l'estat d'origen sigui l'estat 3
-	if [ $(runlevel | cut -d ' ' -f1) -eq 3 ]
+	if [ $(runlevel | cut -d ' ' -f2) -eq 3 ]
 	then
 		#per tots els usuaris en la carpeta /home/:
 		for user in $(ls /home)

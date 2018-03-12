@@ -4,7 +4,7 @@
 # Autors: Cristòfol Daudèn i Aleix Marine                                           
 # Data d'implementació: 21/2/2018                                                   
 # Versio 1.0                                                                        
-# Permisos:									        #                                
+# Permisos:									                                   
 # Descripció i paràmetres: 	Script que limita l’ús d’una cpu (entrada per paràmetre)
 #							a l’usuari que li passem també per paràmetre            
 # -Argument 1: CPU de la que es limitarà l'ús									
@@ -17,7 +17,7 @@ function ayuda {
 # Autors: Cristòfol Daudèn i Aleix Marine                                           
 # Data d'implementació: 21/2/2018                                                   
 # Versio 1.0                                                                        
-# Permisos:									        #                                
+# Permisos:									                                  
 # Descripció i paràmetres: 	Script que limita l’ús d’una cpu (entrada per paràmetre)
 #							a l’usuari que li passem també per paràmetre            
 # -Argument 1: CPU de la que es limitarà l'ús									
@@ -54,7 +54,6 @@ fi
 mkdir /sys/fs/cgroup/cpuset/$2
 echo $1 > /sys/fs/cgroup/cpuset/$2/cpuset.cpus
 echo 0 > /sys/fs/cgroup/cpuset/$2/cpuset.mems
-#Això no està bé perque el que fariem és assignar la shell des de la que cridem l'script a aquell group i no a l'usuari en sí
-#term=$(echo $$)
-#echo $term > /sys/fs/cgroup/cpuset/$2/tasks
+echo $(ps -ef | grep $$ | tr -s ' ' | sed -n '1p' | cut -d ' ' -f3) > /sys/fs/cgroup/cpuset/$2/tasks
+
 exit 0
