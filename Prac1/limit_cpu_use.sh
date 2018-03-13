@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #####################################################################################
-# Autors: Cristòfol Daudèn i Aleix Marine                                           
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaóps                                           
 # Data d'implementació: 21/2/2018                                                   
 # Versio 1.0                                                                        
 # Permisos:									                                   
@@ -48,12 +48,20 @@ then
 	exit 1
 fi
 
-#falta comprovar els usuaris
+#comprovem que l'usuari existeixi
+id $2 > /dev/null >&2
+if [ $? -eq 0 ]
+then
+	#creem un group per l'usuari
+	mkdir /sys/fs/cgroup/cpuset/$2
+	echo $1 > /sys/fs/cgroup/cpuset/$2/cpuset.cpus   
+	echo 0 > /sys/fs/cgroup/cpuset/$2/cpuset.mems
+	#echo $(ps -ef | grep $$ | tr -s ' ' | sed -n '1p' | cut -d ' ' -f3) > /sys/fs/cgroup/cpuset/$2/tasks
+	echo $(ps -ef | egrep -e "^$2.*bash" | tr -s ' ' | sed -n '1p' | cut -d ' ' -f3) > /sys/fs/cgroup/cpuset/$2/tasks
 
-#creem un group per l'usuari
-mkdir /sys/fs/cgroup/cpuset/$2
-echo $1 > /sys/fs/cgroup/cpuset/$2/cpuset.cpus
-echo 0 > /sys/fs/cgroup/cpuset/$2/cpuset.mems
-echo $(ps -ef | grep $$ | tr -s ' ' | sed -n '1p' | cut -d ' ' -f3) > /sys/fs/cgroup/cpuset/$2/tasks
-
-exit 0
+	exit 0
+else
+	echo "ERROR, user doesn't exists" >&2
+	ayuda
+	exit 1
+fi
