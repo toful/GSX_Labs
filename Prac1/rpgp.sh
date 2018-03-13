@@ -84,7 +84,7 @@ do
 			then
 				if [ $(whoami) != "root" ]
 				then
-					echo "Per poder canviar el propierari del fitxer necessites permisos de root" >&2
+					echo "ERROR, Root permissions needed" >&2
 				else
 					chown $user $path
 					echo "S'ha modificat el propietari a: $user"
@@ -101,7 +101,7 @@ do
 			then
 				if [ $(whoami) != "root" ]
 				then
-					echo "Per poder canviar el grup del fitxer necessites permisos de root" >&2
+					echo "ERROR, Root permissions needed" >&2
 				else
 					chgrp $group $path
 					echo "S'ha modificat el grup a: $group"
@@ -109,7 +109,7 @@ do
 			fi
 		fi
 	else
-		echo "ERROR, el fitxer $path ja no existeix" >&2
+		echo "ERROR, file $path doesn't exist" >&2
 	fi
 done
 exit 0

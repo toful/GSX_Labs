@@ -37,7 +37,7 @@ backup_service(){
 				if [ -e /back/$user/$(date +%y%m%d).tar.gz ]
 				then
 					#cas en que ja s'ha fet un backup aquest dia
-					echo "Avui ja s'ha fet una copa de seguretat de l'usuari $user" >&2
+					echo "ERROR, a backup from $user files, has already been made today" >&2
 				else
 					if [ -d /back/$user ]
 					then

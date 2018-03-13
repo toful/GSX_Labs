@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #####################################################################################
-# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaóps                                           
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                         
 # Data d'implementació: 21/2/2018                                                   
 # Versio 1.0                                                                        
 # Permisos:									                                   
@@ -14,7 +14,7 @@
 function ayuda {
 	echo "
 ###############################################################################
-# Autors: Cristòfol Daudèn i Aleix Marine                                           
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                             
 # Data d'implementació: 21/2/2018                                                   
 # Versio 1.0                                                                        
 # Permisos:									                                  
