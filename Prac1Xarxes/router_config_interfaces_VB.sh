@@ -47,16 +47,15 @@ iptables -A FORWARD -o $i2 -j ACCEPT
 iptables -A FORWARD -i $i3 -j ACCEPT
 iptables -A FORWARD -o $i3 -j ACCEPT
 
-#permetem el tràfic cap a l'exterior
-iptables -I INPUT -j ACCEPT
-iptables -t nat -A POSTROUTING -s 172.168.16.0/24 -j SNAT --to $addres
-iptables -t nat -A POSTROUTING -s 192.168.17.0/24 -j SNAT --to $addres
-
-#ip route add default via <ip router extern>? No fa falta no? en teoria el router ja té conexió
-
 #reiniciem els servis de xarxa
-/etc/init.d/networking restart
+#/etc/init.d/networking restart
 ifup $i1
 ifup $i2
 ifup $i3
 
+addres=$(hostname -I) 
+
+#permetem el tràfic cap a l'exterior
+iptables -I INPUT -j ACCEPT
+iptables -t nat -A POSTROUTING -s 172.168.16.0/24 -j SNAT --to $addres
+iptables -t nat -A POSTROUTING -s 192.168.17.0/24 -j SNAT --to $addres

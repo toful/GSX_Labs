@@ -27,10 +27,11 @@ echo -e $config > /etc/network/interfaces
 
 #Afegim les rutes que calguin
 echo "up ip route add 192.168.17.0/24 via 192.168.16.1 dev $1" >> /etc/network/interfaces
+echo "up ip route add default via 192.168.16.1" >> /etc/network/interfaces
 
 #ip route add default via <ip router extern>? No fa falta no? en teoria el router ja té conexió
 
 #reiniciem els servis de xarxa
-/etc/init.d/networking restart
+#/etc/init.d/networking restart
 
 ifup $i1

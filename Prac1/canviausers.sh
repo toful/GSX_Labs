@@ -33,9 +33,10 @@ fi
 
 # Comprovem que es tinguin permisos de root
 if [ $(whoami) != "root" ]
-#if [[ "$EUID" -ne 0 ]]; then
-  echo "ERROR, Root permissions needed" >&2
-  exit 1
+then
+#if [[ "$EUID" -ne 0 ]]
+	echo "ERROR, Root permissions needed" >&2
+	exit 1
 fi
 
 #mirem que s'hagin introduit tots els arguments
@@ -58,13 +59,17 @@ do
 	    if [ ${encrypt_pass:0:1} == "!" ]
 	    then
 	    	#desbloquegem l'usuari
-	    	usermod -U $user
+	    	passwd -u $user
+	    	#usermod -U $user
 	    	echo "S'ha desbloquejat l'usuari $user"
 	    else
-	    	#desbloquegem l'usuari
-	    	usermod -L $user
-	    	echo "S'ha desbloquejat l'usuari $user"
+	    	#bloquegem l'usuari
+	    	passwd -u $user
+	    	#usermod -L $user
+	    	echo "S'ha bloquejat l'usuari $user"
 	    fi
+	else
+		echo "ERROR, user $user doesn't exists" >&2
 	fi
 done
 exit 0
