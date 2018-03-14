@@ -53,9 +53,9 @@ ifup $i1
 ifup $i2
 ifup $i3
 
-addres=$(hostname -I) 
+addres=$(hostname -I | cut -d ' ' -f1) 
 
 #permetem el tràfic cap a l'exterior
 iptables -I INPUT -j ACCEPT
-iptables -t nat -A POSTROUTING -s 172.168.16.0/24 -j SNAT --to $addres
+iptables -t nat -A POSTROUTING -s 192.168.16.0/24 -j SNAT --to $addres
 iptables -t nat -A POSTROUTING -s 192.168.17.0/24 -j SNAT --to $addres

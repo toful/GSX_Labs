@@ -12,7 +12,7 @@ then
 	i1=$(echo $interfaces | cut -d ' ' -f1)
 	i2=$(echo $interfaces | cut -d ' ' -f2)
 	i3=$(echo $interfaces | cut -d ' ' -f3)
-	addres=$(hostname -I)
+	addres=$(hostname -I | cut -d ' ' -f1)
 
 else
 	i1=$1
