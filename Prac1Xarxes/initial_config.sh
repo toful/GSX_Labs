@@ -1,27 +1,12 @@
 #!/bin/bash
 function display_help(){
-	echo pene
+	echo -e "This script is for setting up the GSX subjct network confihuration\n
+	It has been done for a three machine structure, a router (with three interfaces),
+	a server and client (with only one interface).\n
+	You have to indicate wich machine do you want to configure in the first argument:
+	\n\trouter\n\tclient\n\tserver
+	"
 }
-
-case "$1" in
-	router)
-		router_config
-		exit 0
-	   	;;
-    client)
-		client_config
-    	exit 0
-      	;;
-    server)
-		server_config
-		exit 0
-		;;
-	*)
-		echo -e "ERROR: machine indication needed:\n\trouter\n\tclient\n\tserver"
-		exit 1
-esac
-
-echo a
 
 function router_config(){
 	if [ $# -lt 4 ]
@@ -134,3 +119,36 @@ function server_config(){
 
 	ifup $i1
 }
+
+while getopts :h option
+do
+	case "$option" in
+    	h)
+      		display_help
+      		exit 1
+      	;;
+    	*)
+      		echo "ERROR: Invalid parameters" >&2 
+      		display_help
+      		exit 1
+      ;;
+  esac
+done
+
+case "$1" in
+	router)
+		router_config
+		exit 0
+	   	;;
+    client)
+		client_config
+    	exit 0
+      	;;
+    server)
+		server_config
+		exit 0
+		;;
+	*)
+		echo -e "ERROR: machine indication needed:\n\trouter\n\tclient\n\tserver"
+		exit 1
+esac
