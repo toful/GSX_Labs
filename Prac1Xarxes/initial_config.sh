@@ -66,7 +66,7 @@ function client_config(){
 
 		#Llistem les interfícies de xarxa
 		interfaces=$(ip addres show | egrep -e "^[0-9]" | cut -d ':' -f2 | tr -d ' ' | sed '/lo/d')
-		i1=$(echo $interfaces | cut -d ' ' -f2)
+		i1=$(echo $interfaces | cut -d ' ' -f1)
 
 	else
 		i1=$2
@@ -97,7 +97,7 @@ function server_config(){
 
 		#Llistem les interfícies de xarxa
 		interfaces=$(ip addres show | egrep -e "^[0-9]" | cut -d ':' -f2 | tr -d ' ' | sed '/lo/d')
-		i1=$(echo $interfaces | cut -d ' ' -f2)
+		i1=$(echo $interfaces | cut -d ' ' -f1)
 
 	else
 		i1=$2
