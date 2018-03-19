@@ -188,7 +188,7 @@ do
 		#./limit_cpu_use.sh $GROUP $CPU
 	done
 
-	SECONDARY_GROUPS="${SECONDARY_GROUPS:1}"
+	SECONDARY_GROUPS="${SECONDARY_GROUPS:1}" # eliminem la coma inicial
 
 	# b basename path a on situarem la nostra carpeta (vindria a er home per defecte)
 	# c password
