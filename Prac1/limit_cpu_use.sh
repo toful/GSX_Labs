@@ -53,15 +53,16 @@ id $2 > /dev/null >&2
 if [ $? -eq 0 ]
 then
 	#creem un group per l'usuari
+	mkdir /sys/fs/cgroup/cpuset
 	mkdir /sys/fs/cgroup/cpuset/$2
 	echo $1 > /sys/fs/cgroup/cpuset/$2/cpuset.cpus   
 	echo 0 > /sys/fs/cgroup/cpuset/$2/cpuset.mems
 	#echo $(ps -ef | grep $$ | tr -s ' ' | sed -n '1p' | cut -d ' ' -f3) > /sys/fs/cgroup/cpuset/$2/tasks
 	echo $(ps -ef | egrep -e "^$2.*bash" | tr -s ' ' | sed -n '1p' | cut -d ' ' -f3) > /sys/fs/cgroup/cpuset/$2/tasks
-
+	
 	exit 0
 else
-	echo "ERROR, user doesn't exists" >&2
+	echo "ERROR, user doesn't exist" >&2
 	ayuda
 	exit 1
 fi
