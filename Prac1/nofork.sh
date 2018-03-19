@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#3. Volem saber el nom i el nom de l’usuari que l’ha executat dels
-#processos que en la seva execució han fet un fork sense fer un
-#exec i que han estat engegats entre les 13:00 i les 14:59
-
 #####################################################################################
 # Autors: Cristòfol Daudèn, Aleix Mariné i Josep Marin                              #
 # Data d'implementació: 23/2/2018													#

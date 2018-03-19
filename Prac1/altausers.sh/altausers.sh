@@ -44,7 +44,7 @@ function ayuda {
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
 # Data d'implementació: 13/3/2018                                                   
 # Versio 1.0                                                                        
-# Permisos:							                                   
+# Permisos:	root						                                   
 # Descripció i paràmetres: 							
 ###############################################################################
 "
@@ -150,7 +150,7 @@ echo "Configuration OK"
 echo -e "$CONF_PATH $LOGIN_DEFAULT $BASE_DIR"
 
 # Add user/s
-while IFS="," read DNI NAME SUR1 SUR2 TLFN GROUPS;
+while IFS="," read DNI NAME SUR1 SUR2 TLFN GROUPS
 do
 	echo "algo"
 	USR_NAME="$NAME${SUR1:0:1}${SUR2:0:1}"
