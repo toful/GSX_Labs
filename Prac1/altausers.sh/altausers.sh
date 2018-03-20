@@ -122,35 +122,46 @@ if [ ! -f $shell ]; then
 	shell="/bin/bash"
 fi
 
+echo "Configuration OK"
+echo -e "$CONF_PATH $LOGIN_DEFAULT $BASE_DIR"
+
 # Add user/s
-while IFS="," read DNI NAME SUR1 SUR2 TLFN GRUPS
+while IFS="," read DNI NAME SUR1 SUR2 TLFN GROUPS
 do
+	echo "algo"
 	USR_NAME="$NAME${SUR1:0:1}${SUR2:0:1}"
-	aux="$USR_NAME"
-	cont=0
-	
+
 	# Check if user is already registered
 	if [ ! -z $(cat /etc/passwd | grep -w $DNI) ]; then #Si la linia on trobem el DNI de 
 		echo "The user with DNI $DNI is already registered." >&2
 		continue # instruccio break; i passem al seguent user
   	fi
   	
+  	cont=0
+  	echo -e "Registrant l'usuari $DNI amb nom d'usuari predefinit $USR_NAME"
 	# Creacio del nom d'usuari
-	id $aux > /dev/null 2> /dev/null	
-	
+	id $USR_NAME > /dev/null 2> /dev/null	
 	while [ "$?" -eq "0" ]; do # Mirem si aux es un nom adequat i sino incrementem comptador i generem nou nom
 		aux="$USR_NAME$cont"
 		cont=$((cont + 1))
+		echo $aux
 		id $aux > /dev/null 2> /dev/null	
 	done
 
+	echo "Name created"
 	# tractem el primer grup de manera especial degut a que es el grup primari
-	if [ ! -z $GRUPS ]; then
-		PRIMARY_GROUP=$(echo -e $GRUPS | cut -d ',' -f1)
-		groupadd -f $PRIMARY_GROUP
-		PRIMARY_CPU=$(echo -e $GRUPS | cut -d ',' -f2)
+	if [ ! -z $GROUPS ]; then
+		PRIMARY_GROUP=$(echo -e $GROUPS | cut -d ',' -f1)
+		groupadd $PRIMARY_GROUP > /dev/nul 2> /dev/nul
+		if [ "$?" -eq "0" ]; then
+			echo -e "\nGroup $PRIMARY_GROUP has been created"
+		else
+			echo -e "\nGroup $PRIMARY_GROUP already exists"
+		fi
+		PRIMARY_CPU=$(echo -e $GROUPS | cut -d ',' -f2)
 		#./limit_cpu_use.sh $PRIMARY_GROUP $PRIMARY_CPU
 	fi
+
 	# creem la resta de grups de cpu amb la cpu que ens passen aprofitant la implementacio de l'altre script
 	SECONDARY_GROUPS=""
 	GRUPS=$(echo $GRUPS | cut -d ',' -f3-)
@@ -163,7 +174,7 @@ do
 		#./limit_cpu_use.sh $GROUP $CPU
 	done
 
-	SECONDARY_GROUPS="${SECONDARY_GROUPS:1}" # eliminem la coma inicial
+	SECONDARY_GROUPS_LIST="${SECONDARY_GROUPS_LIST:1}" # eliminem la coma inicial
 
 	# b basename path a on situarem la nostra carpeta (vindria a er home per defecte)
 	# c password
@@ -176,6 +187,7 @@ do
 	# s shell per defecte
 	
 	useradd -b "$BASE_DIR" -c "$DNI" -d "$BASE_DIR/$aux" -g "$PRIMARY_GROUP" -G "$SECONDARY_GROUPS" -k "$skel" -m -p "$TLFN" -s "$shell" "$aux"
+
 	#echo "$aux:$TLFN" | chpasswd
 done < $1
 exit 0
