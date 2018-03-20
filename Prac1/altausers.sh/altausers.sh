@@ -1,42 +1,14 @@
 #!/bin/bash
-poni="Es vol implementar un script altausers per donar d’alta varis usuaris
-de manera simple:
-• El login de l’usuari serà: el nom, i la primera lletra del cognom1
-i la primera lletra del cognom 2. En cas d’empat, es posarà un
-número darrera que s’anirà incrementant.
-• El passwd serà el número de telèfon.
-• Els directoris d’entrada estaran sota el directori /usuaris i es
-diran con el seu login.
-La resta d’informació s’ha d’agafar dels següents 2 fitxers:
-• Un arxiu de configuració /root/conf/.usuaris on hi haurà la
-configuració general de la nostra empresa. El format de l’arxiu
-serà el següent:
-• path absolut del directori on hi ha els fitxers de
-configuració inicial que s’han de copiar al directori
-d’entrada dels usuaris
-• uidmin-uidmax
-• gidmin-gidmax
-• shell que es posarà a l’usuari
-• Un arxiu que es passarà per paràmetre amb la informació de
-l’usuari que vulguem crear. El format de l’arxiu serà el següent:
-(Tots els camps estaran separats per , i poden contenir qualsevol
-tipus de caràcter)
-DNI, Nom, Cognom1, Cognom2, telèfon, grup1, cpu
-assignada, grup2, cpu assignada, ...
-• El primer grup que passem serà el seu grup primari, la resta
-de grups han de ser secundaris.
-• Darrera del grup hi ha en quina cpu volem que s’executi
-l’usuari quan estigui en el grup actiu indicat.
-• L’script s’ha de deixar preparat per tal de que quan es donin
-d’alta nous usuaris es pugui tornar a executar i afegeixi
-únicament els nous usuaris, sense modificar els ja existents. Per
-tal d’implementar l’script, s’han d’utilitzar les comandes més
-adients de la distribució de debian dels laboratoris.
 
-echo -e $DNI $NAME $SUR1 $SUR2 $TLFN $GRUPS $aux
-echo -e  $shell $skel $uidmin $uidmax $gidmin $gidmax
-"
-
+###############################################################################
+# Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
+# Data d'implementació: 13/3/2018                                                   
+# Versio 1.0                                                                        
+# Permisos:	root						                                   
+# Descripció i paràmetres: Es vol implementar un script altausers per donar
+# d’alta varis usuaris en una sola execució. La informació dels usuaris serà 
+# rebuda per paràmetre a través d'un fitxer				
+###############################################################################
 
 function ayuda {
 	echo "
@@ -44,17 +16,19 @@ function ayuda {
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
 # Data d'implementació: 13/3/2018                                                   
 # Versio 1.0                                                                        
-# Permisos:							                                   
-# Descripció i paràmetres: 							
+# Permisos:	root						                                   
+# Descripció i paràmetres: Es vol implementar un script altausers per donar
+# d’alta varis usuaris en una sola execució. La informació dels usuaris serà 
+# rebuda per paràmetre a través d'un fitxer				
 ###############################################################################
 "
 }
 
+getline () { awk -vlnum=${1} 'NR==lnum {print; exit}'; }
+
 CONF_PATH=/root/conf/.usuaris
 LOGIN_DEFAULT=/etc/login.defs
 BASE_DIR=/usuaris
-
-getline () { awk -vlnum=${1} 'NR==lnum {print; exit}'; }
 
 #mirem que s'hagin introduit tots els arguments
 if [ $# -lt 1 ]; then
@@ -115,31 +89,34 @@ uidmin=$(more $CONF_PATH | getline 2 | cut -d "-" -f1)
 if [ -z $uidmin ]; then
 	uidmin=100
 fi
-# comprovar els parametres i assignar per defecte..if [ $uidmin 
-num=$(grep ^"UID_MIN" /etc/login.defs | cut -d" " -f2)
-sed -e "/UID_MIN/ s/$num/$uidmin/g" "$LOGIN_DEFAULT" > "$LOGIN_DEFAULT"
+# comprovar els parametres i assignar per defecte.
+num=$(grep ^"UID_MIN" /etc/login.defs | tr -s "\t" | tr '\t' ' ' | tr -s " " | cut -d ' ' -f2)
+sed -i "/UID_MIN/ s/$num/$uidmin/g" "$LOGIN_DEFAULT"
 
+read
 uidmax=$(more $CONF_PATH | getline 2 | cut -d "-" -f2)
 if [ -z $uidmax ]; then
 	uidmax=1000
 fi
 
-num=$(grep ^"UID_MAX" /etc/login.defs | cut -d" " -f2)
-sed -e "/UID_MAX/ s/$num/$uidmax/g" "$LOGIN_DEFAULT" > "$LOGIN_DEFAULT"
+
+num=$(grep ^"UID_MAX" /etc/login.defs | tr -s "\t" | tr '\t' ' ' | tr -s " " | cut -d ' ' -f2)
+sed -i "/UID_MAX/ s/$num/$uidmax/g" "$LOGIN_DEFAULT"
+
 
 gidmin=$(more $CONF_PATH | getline 3 | cut -d "-" -f1)
 if [ -z $gidmin ]; then
 	gidmin=200
 fi
-num=$(grep ^"GID_MIN" /etc/login.defs | cut -d" " -f2)
-sed -e "/GID_MIN/ s/$num/$gidmin/g" "$LOGIN_DEFAULT" > "$LOGIN_DEFAULT"
+num=$(grep ^"GID_MIN" /etc/login.defs | tr -s "\t" | tr '\t' ' ' | tr -s " " | cut -d ' ' -f2)
+sed -i "/GID_MIN/ s/$num/$gidmin/g" "$LOGIN_DEFAULT"
 
 gidmax=$(more $CONF_PATH | getline 3 | cut -d "-" -f2)
 if [ -z $gidmax ]; then
 	gidmax=2000
 fi
-num=$(grep ^"GID_MAX" /etc/login.defs | cut -d" " -f2)
-sed -e "/GID_MAX/ s/$num/$gidmax/g" "$LOGIN_DEFAULT" > "$LOGIN_DEFAULT"
+num=$(grep ^"GID_MAX" /etc/login.defs | tr -s "\t" | tr '\t' ' ' | tr -s " " | cut -d ' ' -f2)
+sed -i "/GID_MAX/ s/$num/$gidmax/g" "$LOGIN_DEFAULT"
 
 shell=$(more $CONF_PATH | getline 4)
 if [ ! -f $shell ]; then
@@ -175,7 +152,6 @@ do
 		PRIMARY_CPU=$(echo -e $GRUPS | cut -d ',' -f2)
 		#./limit_cpu_use.sh $PRIMARY_GROUP $PRIMARY_CPU
 	fi
-
 	# creem la resta de grups de cpu amb la cpu que ens passen aprofitant la implementacio de l'altre script
 	SECONDARY_GROUPS=""
 	GRUPS=$(echo $GRUPS | cut -d ',' -f3-)
