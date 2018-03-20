@@ -93,7 +93,6 @@ fi
 num=$(grep ^"UID_MIN" /etc/login.defs | tr -s "\t" | tr '\t' ' ' | tr -s " " | cut -d ' ' -f2)
 sed -i "/UID_MIN/ s/$num/$uidmin/g" "$LOGIN_DEFAULT"
 
-read
 uidmax=$(more $CONF_PATH | getline 2 | cut -d "-" -f2)
 if [ -z $uidmax ]; then
 	uidmax=1000
@@ -176,7 +175,7 @@ do
 	# p password
 	# s shell per defecte
 	
-	useradd -b "/usuaris" -c "$DNI" -d "/usuaris/$aux" -g "$PRIMARY_GROUP" -G "$SECONDARY_GROUPS" -k "$skel" -m -p "$TLFN" -s "$shell" "$aux"
+	useradd -b "$BASE_DIR" -c "$DNI" -d "$BASE_DIR/$aux" -g "$PRIMARY_GROUP" -G "$SECONDARY_GROUPS" -k "$skel" -m -p "$TLFN" -s "$shell" "$aux"
 	#echo "$aux:$TLFN" | chpasswd
 done < $1
 exit 0
