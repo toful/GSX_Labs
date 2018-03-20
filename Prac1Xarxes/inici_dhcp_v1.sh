@@ -55,8 +55,8 @@ function router_config(){
 
 	#permetem el tràfic cap a l'exterior
 	iptables -I INPUT -j ACCEPT
-	iptables -t nat -A POSTROUTING -s 192.168.16.0/24 -j SNAT --to $addres
-	iptables -t nat -A POSTROUTING -s 192.168.17.0/24 -j SNAT --to $addres
+	iptables -t nat -A POSTROUTING -s 192.168.8.0/23 -j SNAT --to $addres
+	iptables -t nat -A POSTROUTING -s 172.17.2.0/24 -j SNAT --to $addres
 }
 
 function client_config(){
@@ -113,8 +113,8 @@ function server_config(){
 	echo -e $config > /etc/network/interfaces
 
 	#Afegim les rutes que calguin
-	echo "up ip route add 192.168.17.0/24 via 192.168.16.1 dev $i1" >> /etc/network/interfaces
-	echo "up ip route add default via 192.168.16.1" >> /etc/network/interfaces
+	#echo "up ip route add 192.168.17.0/24 via 192.168.16.1 dev $i1" >> /etc/network/interfaces
+	#echo "up ip route add default via 192.168.16.1" >> /etc/network/interfaces
 
 	ifup $i1
 }
