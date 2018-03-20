@@ -24,14 +24,16 @@ function router_config(){
 		i3=$4
 	fi
 
+	#revisar la configuració de l'adreça
 	config="auto lo\niface lo inet loopback
 		\n
 		\nauto $i1\niface $i1 inet dhcp
 		\n
-		\nallow-hotplug $i2\niface $i2 inet static\n\taddress 192.168.16.1\n\tnetmask 255.255.255.0\n\tnetwork 192.168.16.0\n\tbroadcast 192.168.16.255
+		\nallow-hotplug $i2\niface $i2 inet static\n\taddress 172.17.2.1\n\tnetmask 255.255.255.0\n\tnetwork 172.17.2.0\n\tbroadcast 172.17.2.255
 		\n
-		\nallow-hotplug $i3\niface $i3 inet static\n\taddress 192.168.17.1\n\tnetmask 255.255.255.0\n\tnetwork 192.168.17.0\n\tbroadcast 192.168.17.255"
+		\nallow-hotplug $i3\niface $i3 inet static\n\taddress 192.168.8.1\n\tnetmask 255.255.254.0\n\tnetwork 192.168.8.0\n\tbroadcast 192.168.9.255"
 
+	cp -p dhcpd.conf /etc/dhcp/dhcpd.conf
 	#Apaguem les interfícies de xarxa
 	ifdown $i1 --force
 	ifdown $i2 --force
@@ -72,7 +74,7 @@ function client_config(){
 
 	config="auto lo\niface lo inet loopback
 		\n
-		\nallow-hotplug $i1\niface $i1 inet static\n\taddress 192.168.17.2\n\tnetmask 255.255.255.0\n\tnetwork 192.168.17.0\n\tbroadcast 192.168.17.255"
+		\nallow-hotplug $i1\niface $i1 inet dhcp"
 
 	ifdown $i1 --force
 
@@ -80,8 +82,8 @@ function client_config(){
 	echo -e $config > /etc/network/interfaces
 
 	#Afegim les rutes que calguin
-	echo "up ip route add 192.168.16.0/24 via 192.168.17.1 dev $i1" >> /etc/network/interfaces
-	echo "up ip route add default via 192.168.17.1" >> /etc/network/interfaces
+	#echo "up ip route add 192.168.16.0/24 via 192.168.17.1 dev $i1" >> /etc/network/interfaces
+	#echo "up ip route add default via 192.168.17.1" >> /etc/network/interfaces
 
 	ifup $i1
 }
@@ -100,9 +102,10 @@ function server_config(){
 		i1=$2
 	fi
 
+	#revisar la configuració de l'adreça
 	config="auto lo\niface lo inet loopback
 		\n
-		\nallow-hotplug $i1\niface $i1 inet static\n\taddress 192.168.16.2\n\tnetmask 255.255.255.0\n\tnetwork 192.168.16.0\n\tbroadcast 192.168.16.255"
+		\nallow-hotplug $i1\niface $i1 inet dhcp"
 
 	ifdown $i1 --force
 
