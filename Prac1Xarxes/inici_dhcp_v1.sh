@@ -34,6 +34,8 @@ function router_config(){
 		\nallow-hotplug $i3\niface $i3 inet static\n\taddress 192.168.8.1\n\tnetmask 255.255.254.0\n\tnetwork 192.168.8.0\n\tbroadcast 192.168.9.255"
 
 	cp -p dhcpd.conf /etc/dhcp/dhcpd.conf
+
+	sed -i "s/INTERFACES=\".*\"/INTERFACES=\"$i2, $i3\"/g" "/etc/default/isc-dhcp-server"
 	#Apaguem les interfícies de xarxa
 	ifdown $i1 --force
 	ifdown $i2 --force
