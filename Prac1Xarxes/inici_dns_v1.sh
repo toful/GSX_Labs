@@ -48,6 +48,14 @@ function router_config(){
 	#Activem el forwarding
 	echo 1 >/proc/sys/net/ipv4/ip_forward
 
+	cp named.conf.local /etc/bind/named.conf.local
+	cp named.conf.options /etc/bind/named.conf.options
+	cp DMZ_2.gsx.db /var/cache/bind/DMZ_2.gsx.db
+	cp INTRANET.db /var/cache/bind/INTRANET.db
+	cp db.192.168.9 /var/cache/bind/db.192.168.9
+	cp db.192.168.8 /var/cache/bind/db.192.168.8
+	cp db.172 /var/cache/bind/db.172
+
 	#reiniciem les interficies de xarxa
 	ifup $i1
 	ifup $i2
@@ -60,6 +68,13 @@ function router_config(){
 	iptables -I INPUT -j ACCEPT
 	iptables -t nat -A POSTROUTING -s 192.168.8.0/23 -j SNAT --to $addres
 	iptables -t nat -A POSTROUTING -s 172.17.2.0/24 -j SNAT --to $addres
+
+	sed -e '$i nameserver 172.0.0.1' /etc/resolv.conf > resolv.conf
+	cp resolv.conf > /etc/resolv.conf
+	rm resolv.conf
+
+	/etc/init.d/bind9 restart
+
 }
 
 function client_config(){
@@ -84,9 +99,7 @@ function client_config(){
 	#escribim canvis en el fitxer /etc/network/interfaces
 	echo -e $config > /etc/network/interfaces
 
-	#Afegim les rutes que calguin
-	#echo "up ip route add 192.168.16.0/24 via 192.168.17.1 dev $i1" >> /etc/network/interfaces
-	#echo "up ip route add default via 192.168.17.1" >> /etc/network/interfaces
+	echo -e "domain INTRANET\nsearch INTRANET\nnameserver 192.168.8.1" > /etc/resolv.conf
 
 	ifup $i1
 }
@@ -115,9 +128,7 @@ function server_config(){
 	#escribim canvis en el fitxer /etc/network/interfaces
 	echo -e $config > /etc/network/interfaces
 
-	#Afegim les rutes que calguin
-	#echo "up ip route add 192.168.17.0/24 via 192.168.16.1 dev $i1" >> /etc/network/interfaces
-	#echo "up ip route add default via 192.168.16.1" >> /etc/network/interfaces
+	echo -e "domain DMZ_2.gsx\nsearch DMZ_2.gsx\nnameserver 172.17.2.1" > /etc/resolv.conf
 
 	ifup $i1
 }

@@ -10,6 +10,6 @@ $TTL 604800
 1		IN  PTR 	ns.grup2.gsx.
 2		IN  PTR 	www.taller.grup2.gsx.
 2		IN  PTR 	www.tenda.grup2.gsx.
-#3		IN  PTR 	correu.grup2.gsx.
-#3		IN  PTR 	smtp.grup2.gsx.
-#3		IN  PTR 	pop3.grup2.gsx.
+3		IN  PTR 	correu.grup2.gsx.
+3		IN  PTR 	smtp.grup2.gsx.
+3		IN  PTR 	pop3.grup2.gsx.

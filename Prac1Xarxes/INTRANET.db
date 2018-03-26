@@ -11,3 +11,5 @@ ns		IN  A   	192.168.8.1
 
 ; pcs
 pc1.interna. 	IN  A   	192.168.8.2
+pc2.interna. 	IN  A   	192.168.8.3
+pc3.interna. 	IN  A   	192.168.8.4
