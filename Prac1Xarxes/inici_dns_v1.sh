@@ -69,8 +69,8 @@ function router_config(){
 	iptables -t nat -A POSTROUTING -s 192.168.8.0/23 -j SNAT --to $addres
 	iptables -t nat -A POSTROUTING -s 172.17.2.0/24 -j SNAT --to $addres
 
-	sed -e '$i nameserver 172.0.0.1' /etc/resolv.conf > resolv.conf
-	cp resolv.conf > /etc/resolv.conf
+	sed -e '1i nameserver 127.0.0.1' /etc/resolv.conf > resolv.conf
+	cp resolv.conf /etc/resolv.conf
 	rm resolv.conf
 
 	/etc/init.d/bind9 restart
