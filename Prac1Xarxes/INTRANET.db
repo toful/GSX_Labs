@@ -1,0 +1,15 @@
+$TTL 604800
+@		IN  SOA 	ns.interna. root.ns.interna. (
+					1   	; Serial
+					604800	; Refresh
+					86400	; Retry
+					2419200	; Expire
+					604800)	; Negative Cache TTL
+;
+@		IN  NS  	ns.interna.
+ns		IN  A   	192.168.8.1
+
+; pcs
+pc1.interna. 	IN  A   	192.168.8.2
+pc2.interna. 	IN  A   	192.168.8.3
+pc3.interna. 	IN  A   	192.168.8.4
