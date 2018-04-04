@@ -1,6 +1,6 @@
 #!/bin/bash
 function display_help(){
-	echo -e "This script is for setting up the GSX subjct network configuration\
+	echo -e "This script is for setting up the GSX subjct network configuration.
 It has been done for a three machine structure, a router (with three interfaces),a server and client (with only one interface).
 In this script a DNS service is also implemented.
 You have to indicate wich machine do you want to configure in the first argument:
@@ -36,7 +36,7 @@ function router_config(){
 
 	cp -p dhcpd.conf /etc/dhcp/dhcpd.conf
 
-	sed -i "s/INTERFACES=\".*\"/INTERFACES=\"$i2, $i3\"/g" "/etc/default/isc-dhcp-server"
+	sed -i "s/INTERFACES=\".*\"/INTERFACES=\"$i2 $i3\"/g" "/etc/default/isc-dhcp-server"
 	#Apaguem les interfícies de xarxa
 	ifdown $i1 --force
 	ifdown $i2 --force
@@ -48,8 +48,19 @@ function router_config(){
 	#Activem el forwarding
 	echo 1 >/proc/sys/net/ipv4/ip_forward
 
+	echo -e "options{\n\tdirectory \"/var/cache/bind\";\n\tforwarders {" > /etc/bind/named.conf.options
+	IFS=$'\n'
+	for line in $(cat /etc/resolv.conf)
+	do
+		if [ "$(echo $line | egrep -e "[0-9].*")" != "" ]
+		then		
+			echo -e "\t\t$(echo $line | egrep -e "[0-9].*" | cut -d ' ' -f2);" >> /etc/bind/named.conf.options
+		fi	
+	done
+	echo -e "\t};\n};" >> /etc/bind/named.conf.options
+
 	cp named.conf.local /etc/bind/named.conf.local
-	cp named.conf.options /etc/bind/named.conf.options
+	#cp named.conf.options /etc/bind/named.conf.options
 	cp DMZ_2.gsx.db /var/cache/bind/DMZ_2.gsx.db
 	cp INTRANET.db /var/cache/bind/INTRANET.db
 	cp db.192.168.9 /var/cache/bind/db.192.168.9
