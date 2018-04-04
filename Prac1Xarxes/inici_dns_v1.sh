@@ -52,12 +52,15 @@ function router_config(){
 	IFS=$'\n'
 	for line in $(cat /etc/resolv.conf)
 	do
-		echo >> "\n\t\t$(echo $line | egrep -e "[0-9].*" | cut -d ' ' -f2);"
+		if [ "$(echo $line | egrep -e "[0-9].*")" != "" ]
+		then		
+			echo -e "\t\t$(echo $line | egrep -e "[0-9].*" | cut -d ' ' -f2);" >> /etc/bind/named.conf.options
+		fi	
 	done
-	echo -e "\n\t}\n;};" >> /etc/bind/named.conf.options
+	echo -e "\t};\n};" >> /etc/bind/named.conf.options
 
 	cp named.conf.local /etc/bind/named.conf.local
-	cp named.conf.options /etc/bind/named.conf.options
+	#cp named.conf.options /etc/bind/named.conf.options
 	cp DMZ_2.gsx.db /var/cache/bind/DMZ_2.gsx.db
 	cp INTRANET.db /var/cache/bind/INTRANET.db
 	cp db.192.168.9 /var/cache/bind/db.192.168.9
