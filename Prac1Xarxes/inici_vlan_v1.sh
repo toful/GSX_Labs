@@ -17,7 +17,7 @@ function router_config(){
 		echo "Usem la configuració per defecte"
 
 		#Obtenim la segona interficie que sera la que 
-		i2=$(ip addres show | egrep -e "^[0-9]" | cut -d ':' -f2 | tr -d '\n' | cut -f4 -d ' ')
+		i2=$(ip addres show | egrep -e "^[0-9]" | cut -f2 -d ':' | tr -d '\n' | cut -f4 -d ' ')
 		IP="192.168.250.1"
 	
 	else
@@ -44,7 +44,7 @@ function server_config(){
 		echo "Usem la configuració per defecte"
 
 		#Obtenim la interficie 
-		i1=$(ip addres show | egrep -e "^[0-9]" | cut -d ':' -f2 | tr -d ' ' | sed '/lo/d' | cut -d ' ' -f1)
+		i1=$(ip address show | grep -e "^[0-9]" | cut -d ':' -f2 | tr '\n' ' ' | cut -d ' ' -f4)
 		IP="192.168.250.2"
 	else
 		i1=$2
@@ -52,9 +52,13 @@ function server_config(){
 	fi
 	
 	net=$(echo $IP | cut -f1,2 -d '.')
-	ip link add link $i2 name $i2.102 type vlan id 7
-	ip addr add $IP/23 brd $net.1.255 dev $i2.102
-	ip link set $i2.102 up
+echo -e "ip link add link $i1 name $i1.102 type vlan id 7
+	ip addr add $IP/23 brd $net.1.255 dev $i1.102
+	ip link set $i1.102 up"
+
+	ip link add link $i1 name $i1.102 type vlan id 7
+	ip addr add $IP/23 brd $net.1.255 dev $i1.102
+	ip link set $i1.102 up
 }
 
 while getopts :h option
