@@ -30,9 +30,9 @@ function router_config(){
 echo -e "ip link add link $i2 name $i2.102 type vlan id 7
 	ip addr add $IP/23 brd $net.1.255 dev $i2.102
 	ip link set $i2.102 up"
-	ip link add link $i2 name $i2.102 type vlan id 7
-	ip addr add $IP/23 brd $net.1.255 dev $i2.102
-	ip link set $i2.102 up
+	ip link add link $i2 name VirtualLAN.102 type vlan id 7
+	ip addr add $IP/23 brd $net.1.255 dev VirtualLAN.102
+	ip link set VirtualLAN.102 up
 
 }
 
@@ -56,9 +56,9 @@ echo -e "ip link add link $i1 name $i1.102 type vlan id 7
 	ip addr add $IP/23 brd $net.1.255 dev $i1.102
 	ip link set $i1.102 up"
 
-	ip link add link $i1 name $i1.102 type vlan id 7
-	ip addr add $IP/23 brd $net.1.255 dev $i1.102
-	ip link set $i1.102 up
+	ip link add link $i1 name VirtualLAN.102 type vlan id 7
+	ip addr add $IP/23 brd $net.1.255 dev VirtualLAN.102
+	ip link set VirtualLAN.102 up
 }
 
 while getopts :h option
