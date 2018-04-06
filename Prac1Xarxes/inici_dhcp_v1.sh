@@ -83,7 +83,7 @@ function client_config(){
 	#escribim canvis en el fitxer /etc/network/interfaces
 	echo -e $config > /etc/network/interfaces
 
-	Afegim les rutes que calguin
+	#Afegim les rutes que calguin
 	echo "up ip route add 192.168.16.0/24 via 192.168.17.1 dev $i1" >> /etc/network/interfaces
 	echo "up ip route add default via 192.168.17.1" >> /etc/network/interfaces
 
@@ -114,7 +114,7 @@ function server_config(){
 	#escribim canvis en el fitxer /etc/network/interfaces
 	echo -e $config > /etc/network/interfaces
 
-	Afegim les rutes que calguin
+	#Afegim les rutes que calguin
 	echo "up ip route add 192.168.17.0/24 via 192.168.16.1 dev $i1" >> /etc/network/interfaces
 	echo "up ip route add default via 192.168.16.1" >> /etc/network/interfaces
 
