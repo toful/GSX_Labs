@@ -35,7 +35,7 @@ function router_config(){
 
 	cp -p dhcpd.conf /etc/dhcp/dhcpd.conf
 
-	sed -i "s/INTERFACES=\".*\"/INTERFACES=\"$i2, $i3\"/g" "/etc/default/isc-dhcp-server"
+	sed -i "s/INTERFACES=\".*\"/INTERFACES=\"$i2 $i3\"/g" "/etc/default/isc-dhcp-server"
 	#Apaguem les interfícies de xarxa
 	ifdown $i1 --force
 	ifdown $i2 --force

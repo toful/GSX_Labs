@@ -6,7 +6,7 @@ $TTL 604800
 					2419200	; Expire
 					604800)	; Negative Cache TTL
 ;
-@		IN	ns	ns.grup2.gsx.
+@		IN	NS		ns.grup2.gsx.
 		IN	MX	10	correu.grup2.gsx.
 ns		IN	A		172.17.2.1
 
@@ -16,4 +16,4 @@ smtp		CNAME	correu
 pop3		CNAME	correu
 
 www.taller	IN	A		172.17.2.2
-www.tenda	CNAME	www.taller
+www.tenda	CNAME		www.taller
