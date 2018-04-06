@@ -15,6 +15,11 @@ zone "interna" {
 	file "INTRANET.db";
 };
 
+zone "serveis.inerna" {
+	type master;
+	file "VLAN.db";
+};
+
 zone 2.17.172.in-addr.arpa {
 	type master;
 	file "db.172";
@@ -28,4 +33,9 @@ zone 8.168.192.in-addr.arpa{
 zone 9.168.192.in-addr.arpa{
 	type master;
 	file "db.192.168.9";
+};
+
+zone 250.168.192.in-addr.arpa{
+	type master;
+	file "db.192.168.250";
 };

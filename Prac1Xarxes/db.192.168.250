@@ -1,0 +1,15 @@
+$TTL 604800
+@   	IN  SOA 	ns.serveis.inerna. root.ns.serveis.inerna. (
+                	1		; Serial
+                	604800	; Refresh
+                	86400	; Retry
+                	2419200	; Expire
+                	604800)	; Negative Cache TTL
+;
+@		IN  NS  	ns.serveis.inerna.
+1		IN  PTR 	ns.serveis.inerna.
+2		IN  PTR 	www.taller.serveis.inerna.
+2		IN  PTR 	www.tenda.serveis.inerna.
+3		IN  PTR 	correu.serveis.inerna.
+3		IN  PTR 	smtp.serveis.inerna.
+3		IN  PTR 	pop3.serveis.inerna.
