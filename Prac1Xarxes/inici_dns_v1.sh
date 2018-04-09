@@ -112,11 +112,11 @@ function client_config(){
     #escribim canvis en el fitxer /etc/network/interfaces
     echo -e $config > /etc/network/interfaces
 
-    echo -e "domain INTRANET\nsearch INTRANET\nnameserver 192.168.8.1" > /etc/resolv.conf
+    #echo -e "domain INTRANET\nsearch INTRANET\nnameserver 192.168.8.1" > /etc/resolv.conf
 
     #Afegim les rutes que calguin
-    echo "up ip route add 192.168.16.0/24 via 192.168.17.1 dev $i1" >> /etc/network/interfaces
-    echo "up ip route add default via 192.168.17.1" >> /etc/network/interfaces
+    echo "up ip route add 172.17.2.0/24 via 192.168.8.1 dev $i1" >> /etc/network/interfaces
+    echo "up ip route add default via 192.168.8.1" >> /etc/network/interfaces
 
     ifup $i1
 }
@@ -145,11 +145,11 @@ function server_config(){
     #escribim canvis en el fitxer /etc/network/interfaces
     echo -e $config > /etc/network/interfaces
 
-    echo -e "domain DMZ_2.gsx\nsearch DMZ_2.gsx\nnameserver 172.17.2.1" > /etc/resolv.conf
+    #echo -e "domain DMZ_2.gsx\nsearch DMZ_2.gsx\nnameserver 172.17.2.1" > /etc/resolv.conf
 
     #Afegim les rutes que calguin
-    echo "up ip route add 192.168.17.0/24 via 192.168.16.1 dev $i1" >> /etc/network/interfaces
-    echo "up ip route add default via 192.168.16.1" >> /etc/network/interfaces
+    echo "up ip route add 192.168.8.0/23 via 172.17.2.1 dev $i1" >> /etc/network/interfaces
+    echo "up ip route add default via 172.17.2.1" >> /etc/network/interfaces
 
     ifup $i1
 }
