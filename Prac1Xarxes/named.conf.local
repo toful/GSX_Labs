@@ -15,7 +15,7 @@ zone "interna" {
 	file "INTRANET.db";
 };
 
-zone "serveis.inerna" {
+zone "serveis.interna" {
 	type master;
 	file "VLAN.db";
 };
