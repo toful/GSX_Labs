@@ -1,0 +1,13 @@
+$TTL 604800
+@   	IN  SOA 	ns.grup2.gsx. root.ns.grup2.gsx. (
+                	1   	; Serial
+                	604800  ; Refresh
+                	86400   ; Retry
+                	2419200 ; Expire
+                	604800) ; Negative Cache TTL
+;
+@   	IN  NS  	ns.grup2.gsx.
+ns  	IN  A   	IP_PUBLICA
+
+www.taller  IN  A	IP_PUBLICA
+www.tenda 	CNAME   www.taller

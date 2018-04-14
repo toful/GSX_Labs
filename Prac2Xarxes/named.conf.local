@@ -1,0 +1,89 @@
+#Options {
+#	directory "/etc/namedb";
+#	allow-query-cache { none; };
+#	allow-query { any; };
+#	recursion no; 					#yes perquè funcionin els externs
+#};
+
+view internal{
+	match-clients { 192.168.8.0/23; localhost: };
+	recursion yes;
+
+	zone "interna" {
+		type master;
+		file "INTRANET.db";
+	};
+
+	zone 8.168.192.in-addr.arpa{
+		type master;
+		file "db.192.168.8";
+	};
+
+	zone 9.168.192.in-addr.arpa{
+		type master;
+		file "db.192.168.9";
+	};
+
+	zone "grup2.gsx" {
+		type master;
+		file "DMZ_2.gsx.db";
+	};
+
+	zone 2.17.172.in-addr.arpa {
+		type master;
+		file "db.172";
+	};
+
+	zone "serveis.interna" {
+		type master;
+		file "VLAN.db";
+	};
+
+	zone 250.168.192.in-addr.arpa{
+		type master;
+		file "db.192.168.250";
+	};
+
+	include "/etc/bind/named.conf.default-zones";
+};
+
+view "DMZ"{
+	match-clients { 172.17.2.0/24; };
+	recursion no;
+
+	zone "grup2.gsx" {
+		type master;
+		file "DMZ_2.gsx.db";
+	};
+
+	zone 2.17.172.in-addr.arpa {
+		type master;
+		file "db.172";
+	};
+
+	zone "serveis.interna" {
+		type master;
+		file "VLAN.db";
+	};
+
+	zone 250.168.192.in-addr.arpa{
+		type master;
+		file "db.192.168.250";
+	};
+};
+
+view "external"{
+	match-clients { any; };
+	recursion yes;
+
+	zone "grup2.gsx" {
+		type master;
+		file "externa.db";
+	};
+
+	#mirar la ip externa del router
+	zone 10.in-addr.arpa {
+		type master;
+		file "db.externa";
+	};
+};
