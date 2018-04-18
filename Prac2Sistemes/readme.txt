@@ -47,3 +47,9 @@ debugfs /dev/sda5
 /etc/fstab
 	tota la informació de les particions o discs que s'han de muntar al iniciar el sistema
 	s'ha de modificar si es volen fer els canvis anteriors permanents
+
+stty -a # et dona informacio del terminal cal utilitzarla per a que la contrassenya no es vegi
+mknod nompipe p # crea un node de tipus pipe
+
+echo "hola nois i noies" > nompipe
+
