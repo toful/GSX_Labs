@@ -1,39 +1,24 @@
 #!/bin/bash
 
 <<INSTRUCCIONS
-Es vol creat un script anomenat lp que supleixi lactual comanda lp (per a enviar a
-imprimir un document) i que a mes de les opcions normals que accepta la comanda lp
-estàndard, quan s’esculli la impressora virtualImpre, usant lopció -d de la comanda,
-ens demani una paraula clau (emmaiatzemada per cada usuari), comprovi la validesa i
-en cas que sigui correcta limprimeixi, si la clau es incorrecta, ha de donar un missatie
-derror.
-NOTA: El ftxer de paraules clau estarà en el directori /usr/local/secret i ha d’estar
-format pel login i la paraula clau. Opcionalment les paraules clau shaurien dencriptar.
-Heu de tenir en compte que la paraula clau no ha de sortir escrita per pantalla (heu
-dusar la comanda stty per activar o desactivar lecho de pantalla)
+Es vol fer un script que s'executi en el moment en que un usuari entra al sistema i
+l'informi de l'espai de disc que s'està utilitzant sota del seu directori d'entrada. Volem
+usar la comanda du per a calcular l'espai del disc que ocupa.
 INSTRUCCIONS
 
 ###############################################################################
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
-# Data d'implementació: 18/4/2018                                                   
+# Data d'implementació: 2/5/2018                                                  
 # Versio 1.0                                                                        
-# Permisos:	necessita els permisos per a escriure en la carpeta usr/local, per tant utilitzarem
-# super-usuari.                                   
-# Descripció i paràmetres: Es vol implementar un script que posi a punt una comanda
-# anomenada lp, que tingui les mateixes opcions que la comanda lp que ja es troba
-# en el sistema pero que quan s'specifiqui el parametre -d acompanyat de virtualImpre
-# sol·liciti una contrassenya (propia de cada usuari).
+# Permisos: permisos per a modificar ~/.profile                                   
+# Descripció i paràmetres: Es vol implementar un script que s'executi en el moment en que un
+# usuari entra al sistema i l'informi de l'espai de disc que s'està utilitzant sota del seu   
+# directori d'entrada. Volem usar la comanda du per a calcular l'espai del disc que ocupa.
 #
-# L'script comprovara que la contrassenya introduida per l'usuari es la mateixa
-# que esta definida per a aquell usuari en el fitxer /usr/local/secret.
-# Si es correcta la comanda passa a executar-se, sinó mostra error.
+# Aquest script no necessita arguments, excepte el d'ajuda que es opcional.
 # 
-# Aquest fitxer tindra en cada linea el nom d'usuari i la seva contrassenya,
-# separats per punt i coma.
-# 
-# La constrassenya no sera mostrada per la pantalla.
-#
-# Aquest script no necessita arguments, excepte el d'ajuda que es opcional
+# Aquest script instal·la una sola línia de codi al fitxer ~/.profile que 
+# mostra una notificació d'escriptori quan l'usuari es logueja.
 ###############################################################################
 
 function ayuda {
@@ -45,38 +30,21 @@ function ayuda {
 "
 }
 
-getline () { awk -vlnum=${1} 'NR==lnum {print; exit}'; }
-
-PASSWDFILE=/usr/local/secret
-LP_PATH=/usr/local/lp
-
-#Mirem parametre d'ajuda
-if [ "$1" = "-h" ]; then
-	ayuda
-	exit 0
-fi
-
 # Comprovem existencia de directoris
-# considerem que el directori /usr/local ja existeixen
-if [ ! -f "/usr/local/secret" ]; then
-	echo -e "\nError, file /usr/local/secret does not exist. Creating..."
-	touch /usr/local/secret
+if [ ! -d "/usr/local/infomem" ]; then
+	echo -e "\nWarning, directory /usr/local/infomem does not exist. Creating..."
+	mkdir /usr/local/infomem
 fi
 
-# Comprovem existencia de directoris
-if [ ! -d "/usr/local/lp" ]; then
-	echo -e "\nError, directory /usr/local/lp does not exist. Creating..."
-	mkdir /usr/local/lp
-fi
+# copiem s'cript en aquest directori mantenint permisos
+cp -p infomem.sh /usr/local/infomem
 
-# Modifiquem la variable PATH si cal. Ara buscara la comanda lp en /usr/local/lp en primer lloc
-if [ $(echo $PATH | cut -d ':' -f1) != $LP_PATH ]
+# carreguem execució de l'script a ~/.profile si no es troba ja carregada
+if [ -z "$(more /etc/profile | grep /usr/local/infomem/infomem.sh)" ]
 then
-	export PATH="$LP_PATH:$PATH" #TODO la variable path que es modifica es la del usuari que executa l'script (root)
-	echo -e "\nPATH=$PATH" >> $HOME/.bashrc
-	echo -e "\nexport PATH" >> $HOME/.bashrc
+	echo '/usr/local/infomem/infomem.sh' >> /etc/profile
 fi
 
-# copiem l'script lp a LP_PATH
-cp lp $LP_PATH
+
+
 
