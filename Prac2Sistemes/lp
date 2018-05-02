@@ -37,15 +37,11 @@ INSTRUCCIONS
 # Aquest script no necessita arguments, excepte el d'ajuda que es opcional
 ###############################################################################
 
-echo jelou9
-
-if [ -z $(echo "$*" | grep -e -d virtualImpre) ]
+if [ "$(echo -e "$*" | grep -e "virtualImpre")" == "" ]
 then # si no troba aquestes opcions
-	echo isreal
 	$(whereis lp | cut -d ' ' -f2) $* #li passem la crida a la comanda real
 else # si troba les opcions
 	USER_NAME=$(whoami)
-	echo "no hi son les opcions -d virtualImpre"
 	# Comprovem existencia de directoris
 	# considerem que el directori /usr/local ja existeixen
 	if [ ! -f "/usr/local/secret" ]
@@ -56,16 +52,17 @@ else # si troba les opcions
 		exit 1
 	else # el fitxer de credencials existeix
 		CREDENTIALS=$(more /usr/local/secret | grep "$USER_NAME")
-		if [ -z $CREDENTIALS]
+		if [ -z "$CREDENTIALS" ]
 		then # l'usuari actual no te credencials per utilitzar limpresora
 			echo -e "\nError, you are not registered, so you cannot use virtualImpre\nAdd your credentials into /usr/local/secret and try again later"
 			exit 2
 		else # l'usuari te credencials
-			echo -e "\nIntrodueix la teva contrassenya"
+			echo -e "Introdueix la teva contrassenya"
 			stty -echo # apaguem el echo
 			read PASSWORD
 			stty echo # l'encenem
-			if [ $(echo $CREDENTIALS | cut -d ';' -f2) -eq $PASSWORD ]
+			REAL_PASSWORD=$(echo $CREDENTIALS | cut -d ';' -f2)
+			if [ "$REAL_PASSWORD" == "$PASSWORD" ]
 			then # si el pass coincideix llavors cridem a la comanda
 				$(whereis lp | cut -d ' ' -f2) $* #li passem la crida a la comanda real
 			else # si no coincideix 
