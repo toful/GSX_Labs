@@ -20,7 +20,7 @@ INSTRUCCIONS
 # Aquest script instal·la una sola línia de codi al fitxer ~/.profile que 
 # mostra una notificació d'escriptori quan l'usuari es logueja.
 ###############################################################################
-echo $(whoami) >> /home/amt/funsiono
-> /home/amt/funsiono
-notify-send "Avís memoria" "Hola $USER, la teva carpeta d'inici ocupa $(du -s $HOME | cut -d$'\t' -f1) Bytes ($(du -hs $HOME | cut -d$'\t' -f1))" 2> /dev/nul
+
+
+notify-send "Avís memoria" "Hola $USER, la teva carpeta d'inici ocupa $(du -s $HOME --exclude=*/.* | cut -d$'\t' -f1) Bytes ($(du -sh $HOME --exclude=*/.* | cut -d$'\t' -f1))"
 
