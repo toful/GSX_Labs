@@ -79,6 +79,3 @@ fi
 # copiem l'script lp a LP_PATH
 cp lp $LP_PATH
 
-# sortim sense errors
-exit 0
-
