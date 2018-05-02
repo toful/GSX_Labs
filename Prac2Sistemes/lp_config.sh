@@ -73,6 +73,7 @@ fi
 if [ $(echo $PATH | cut -d ':' -f1) != $LP_PATH ]
 then
 	export PATH="$LP_PATH:$PATH" #TODO la variable path que es modifica es la del usuari que executa l'script (root)
+	echo -e "\nPATH=$PATH" >> $HOME/.profile
 fi
 
 # copiem l'script lp a LP_PATH
