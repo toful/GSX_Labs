@@ -37,13 +37,15 @@ INSTRUCCIONS
 # Aquest script no necessita arguments, excepte el d'ajuda que es opcional
 ###############################################################################
 
-echo jelou
-if [ -z $(echo -e "$#" | grep -e "-d virtualImpre") ]
+echo jelou9
+
+if [ -z $(echo "$*" | grep -e -d virtualImpre) ]
 then # si no troba aquestes opcions
+	echo isreal
 	$(whereis lp | cut -d ' ' -f2) $* #li passem la crida a la comanda real
 else # si troba les opcions
 	USER_NAME=$(whoami)
-
+	echo "no hi son les opcions -d virtualImpre"
 	# Comprovem existencia de directoris
 	# considerem que el directori /usr/local ja existeixen
 	if [ ! -f "/usr/local/secret" ]

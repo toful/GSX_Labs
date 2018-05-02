@@ -72,8 +72,7 @@ fi
 # Modifiquem la variable PATH si cal. Ara buscara la comanda lp en /usr/local/lp en primer lloc
 if [ $(echo $PATH | cut -d ':' -f1) != $LP_PATH ]
 then
-	PATH="$LP_PATH:$PATH" #TODO la variable path que es modifica es la del usuari que executa l'script (root)
-	export PATH
+	export PATH="$LP_PATH:$PATH" #TODO la variable path que es modifica es la del usuari que executa l'script (root)
 fi
 
 # copiem l'script lp a LP_PATH
