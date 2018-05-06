@@ -17,8 +17,8 @@ INSTRUCCIONS
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
 # Data d'implementació: 18/4/2018                                                   
 # Versio 1.0                                                                        
-# Permisos:	necessita els permisos per a escriure en la carpeta usr/local, per tant utilitzarem
-# super-usuari.                                   
+# Permisos:	necessita els permisos per a escriure en la carpeta usr/local i modificar
+# el path.
 # Descripció i paràmetres: Es vol implementar un script que posi a punt una comanda
 # anomenada lp, que tingui les mateixes opcions que la comanda lp que ja es troba
 # en el sistema pero que quan s'specifiqui el parametre -d acompanyat de virtualImpre
@@ -40,13 +40,28 @@ function ayuda {
 	echo "
 ###############################################################################
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
-# Data d'implementació: 13/3/2018                                                   
-# Vers
-"
+# Data d'implementació: 18/4/2018                                                   
+# Versio 1.0                                                                        
+# Permisos:	necessita els permisos per a escriure en la carpeta usr/local, per tant utilitzarem
+# super-usuari.                                   
+# Descripció i paràmetres: Es vol implementar un script que posi a punt una comanda
+# anomenada lp, que tingui les mateixes opcions que la comanda lp que ja es troba
+# en el sistema pero que quan s'specifiqui el parametre -d acompanyat de virtualImpre
+# sol·liciti una contrassenya (propia de cada usuari).
+#
+# L'script comprovara que la contrassenya introduida per l'usuari es la mateixa
+# que esta definida per a aquell usuari en el fitxer /usr/local/secret.
+# Si es correcta la comanda passa a executar-se, sinó mostra error.
+# 
+# Aquest fitxer tindra en cada linea el nom d'usuari i la seva contrassenya,
+# separats per punt i coma.
+# 
+# La constrassenya no sera mostrada per la pantalla.
+#
+# Aquest script no necessita arguments, excepte el d'ajuda que es opcional
+###############################################################################"
 }
-
-getline () { awk -vlnum=${1} 'NR==lnum {print; exit}'; }
-
+NEWLINE=$'\n'
 PASSWDFILE=/usr/local/secret
 LP_PATH=/usr/local/lp
 
@@ -57,15 +72,8 @@ if [ "$1" = "-h" ]; then
 fi
 
 # Comprovem existencia de directoris
-# considerem que el directori /usr/local ja existeixen
-if [ ! -f "/usr/local/secret" ]; then
-	echo -e "\nError, file /usr/local/secret does not exist. Creating..."
-	touch /usr/local/secret
-fi
-
-# Comprovem existencia de directoris
 if [ ! -d "/usr/local/lp" ]; then
-	echo -e "\nError, directory /usr/local/lp does not exist. Creating..."
+	echo -e "\nDirectory /usr/local/lp does not exist. Creating..."
 	mkdir /usr/local/lp
 fi
 
@@ -79,4 +87,31 @@ fi
 
 # copiem l'script lp a LP_PATH
 cp lp $LP_PATH
+
+echo "Introdueix la clau mestra del fitxer de contrassenyes"
+read PSW
+if [ -z $PSW ]
+then
+	echo "has deixat el password buit. S'assignara automaticament a \"gsx2018\""
+	PSW="gsx2018"
+fi
+
+newusers=""
+
+echo "Introdueix ara els usuaris i passwords. Deixals buits per a parar"
+while :
+do
+	echo "Introdueix nom d'usuari: "
+	read user
+	echo "Introdueix password: "
+	read pass
+	if [ -z $user ] || [ -z $pass ]; then
+		break
+	fi
+	newusers=$(echo "$newusers${NEWLINE}$user;$pass")
+done
+echo "$newusers" | openssl enc -aes-128-cbc -a -salt -pass pass:$PSW > /usr/local/secret
+
+# Afegim el password al script per a pugui desencriptar
+sed -i "s/-pass pass:/-pass pass:$PSW/g" /usr/local/lp/lp
 
