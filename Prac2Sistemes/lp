@@ -22,7 +22,6 @@ if [ "$(echo -e "$*" | grep -e "virtualImpre")" == "" ]
 then # si no troba aquestes opcions
 	$UBICACIO $* #li passem la crida a la comanda real
 else # si troba les opcions
-	USER_NAME=$(whoami)
 	# Comprovem existencia de directoris
 	# considerem que el directori /usr/local ja existeixen
 	if [ ! -f "/usr/local/secret" ]
@@ -30,7 +29,9 @@ else # si troba les opcions
 		echo -e "\nError, file /usr/local/secret does not exist"
 		exit 1
 	else # el fitxer de credencials existeix
-		CREDENTIALS=$(more /usr/local/secret | openssl enc -aes-128-cbc -a -d -salt -pass pass: | grep -E "$USER_NAME")
+		echo -e "Introdueix el teu usuari"
+		read USER
+		CREDENTIALS=$(more /usr/local/secret | openssl enc -aes-128-cbc -a -d -salt -pass pass: | grep -E "$USER")
 		if [ -z "$CREDENTIALS" ]
 		then # l'usuari actual no te credencials per utilitzar limpresora
 			echo -e "\nError, you are not registered, so you cannot use virtualImpre\nAdd your credentials into /usr/local/secret and try again later"
