@@ -1,0 +1,101 @@
+Primer que res configurem el servidor:
+
+Intsal·lem els paquets necessaris per crear el servidor NFS i NIS
+    apt-get install nfs-common nfs-kernel-server nis portmap
+
+###nom del domini NIS: d119
+
+Creem la carpeta on afegirem els directoris a compartir
+    mkdir /home/remots
+
+Escribim en el /etc/export el directori que compartirem, sobre quina xarxa i amb quins permisos:
+    echo "/home/remots XARXA/MASCARA_XARXA (rw)" > /etc/export
+    #o bé, podem donar servei a qualsevol xarxa
+    echo "/home/remots *(rw,sync)" > /etc/export
+
+Creem la taula NFS amb els direcotris que exportem
+    exportfs -a
+
+Engeguem el servei de NFS
+    /etc/init.d/nfs-kernel-server restart
+
+-----------------OK
+
+Creem els Usuaris per al servidor NIS
+    useradd -m -d /home/remots/user1 -b /home/remots -s /bin/bash user1
+    useradd -m -d /home/remots/user2 -b /home/remots -s /bin/bash user2
+    useradd -m -d /home/remots/user3 -b /home/remots -s /bin/bash user3
+    passwd user1
+    passwd user2
+    passwd user3
+
+-Si hem especificat la xarxa indiquem a quina donara el servidor nis servei
+    echo "NETWORK/24: MYNISDOMAIN : * : none" >> /etc/ypserv.conf
+    echo "* : * : * : deny" >> /etc/ypserv.conf
+
+###En el /etc/ypserv.securenets:
+    MASCARA_XARXA   SERVER_IP
+
+En el fitxer /etc/default/nis modifiquem els següents camps:
+    NISSERVER=true
+    NISCLIENT=false
+    MASTER=IP
+
+En el /etc/hosts:
+    afegir el client
+
+Modifing the /etc/yp.conf file
+    echo "ypserver SERVER_IP" > /etc/yp.conf
+
+Iniciem els diferents serveis:
+    systemctl start ypserv
+    systemctl start yppasswdd
+    systemctl restart rpcbind
+    systemctl restart nis
+
+Arranquem el servidor NIS (no hem de afegir cap altre host)
+    /usr/lib/yp/ypinit -m
+
+Update the NIS maps:
+    make -C /var/yp
+
+###Tot el fitxer de configuració està en el /var/yp/Makefile
+
+
+--------------------------------------------------------------------------------------------------
+Configurem el client
+
+Instal·lem els paquets necessàris
+    apt-get install nfs-common nis portmap
+
+Creem el directori /home/remot/nfs_local
+    mkdir /home/remot/nfs_local
+
+Montem el sistema de fitxers oferit pel NFS
+    mount -t nfs NFS_SERVER_IP:/home/remots /home/remot
+
+---------------------OK
+
+Modifing the /etc/yp.conf file
+    echo "ypserver SERVER_IP" > /etc/yp.conf
+
+Modifing the /etc/nsswitch.conf file
+    echo "passwd: files compat nis" > /etc/nsswitch.conf
+    echo "shadow: files compat nis" >> /etc/nsswitch.conf
+    echo "group: files compat nis" >> /etc/nsswitch.conf
+    echo "netgroup: nis" >> /etc/nsswitch.conf
+    echo "hosts: files dns nis" >> /etc/nsswitch.conf
+
+Afegim al final dels fitxers:
+    echo "+::::::" >> /etc/passwd
+    echo "+:::" >> /etc/group
+    echo "+::::::::" >> /etc/shadow
+
+Reiniciem els serveis
+    systemctl restart ypbind
+    systemctl restart nis
+
+
+yppasswd per veure els usuaris exportats
+ypwhich
+rpcinfo

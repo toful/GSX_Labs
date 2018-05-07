@@ -47,3 +47,37 @@ debugfs /dev/sda5
 /etc/fstab
 	tota la informació de les particions o discs que s'han de muntar al iniciar el sistema
 	s'ha de modificar si es volen fer els canvis anteriors permanents
+
+
+
+#FASE DISPOSITIUS
+ls -l /dev --> PERMISOS SOFTLINKS USER GROUP MAJOR MINOR
+	major --> index manegador del dispositiu
+	minor --> com accedir al dispositiu concret
+
+df
+	permet veure tots els dispositius muntats
+
+si volem que sempre que s'inicie la màquina es monti una aprtició ho hem d'especificar en el --> /etc/fstab
+
+CUPS
+
+Encriptar
+crypt
+$TIPUS_ENCRIPTACIÓ$SALT$PASS_ENCRYPT
+
+stty -a
+	per veure totes les característiques dels terminals que s'estan executant en un determinat moment
+
+mknod <nomPipe> p
+	per crear una pipe
+
+
+#ACCOUNTING I MONITORITZACIÓ
+ulimit -a --> ens mostra els límits de la bash, per veure la comanda: man bash
+	per modificar-ho en tots els usuaris, modificar el .bashrc
+
+/etc/security/limits.conf --> En aquest feitxer e spoden definir diferents dominis (usuaris, grups, ..) i limitar el numero de processos per a aquests dominis definits (dona més personalització que la opció anterior)
+	s'ha de reinciciar el sistema per a que es fagin efectius aquests canvis
+	si no volem reiniciar la màquina: /etc/pam.d/common-session i afegim la següent linia al final: "session optional pam_limits.so" i fem un sudo pam-auth-udate --force
+
