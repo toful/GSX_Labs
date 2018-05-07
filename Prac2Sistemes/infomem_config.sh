@@ -10,7 +10,7 @@ INSTRUCCIONS
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
 # Data d'implementació: 2/5/2018                                                  
 # Versio 1.0                                                                        
-# Permisos: permisos per a modificar /etc/profile                                   
+# Permisos: permisos per a modificar ~/.profile                                   
 # Descripció i paràmetres: Es vol implementar un script que s'executi en el moment en que un
 # usuari entra al sistema i l'informi de l'espai de disc que s'està utilitzant sota del seu   
 # directori d'entrada. Volem usar la comanda du per a calcular l'espai del disc que ocupa.
