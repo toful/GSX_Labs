@@ -78,7 +78,7 @@ timeout 10 ./cpu &
 vmstat -an 1 10 | tail -n +3 | awk {'print $13 " % CPU"'} >> log.txt
 echo "IOSTAT" >> log.txt
 timeout 10 ./cpu &
-iostat -c -y 1 10 | tail -n +3 | tr -s '\n' | grep -v -e "^avg-cpu" | awk {'print $1" % CPU"'} >> log.txt
+iostat -c 1 10 | tail -n +3 | tr -s '\n' | grep -v -e "^avg-cpu" | awk {'print $1" % CPU"'} >> log.txt
 
 echo "RAM TEST" >> log.txt
 echo "VMSTAT" >> log.txt
@@ -92,8 +92,8 @@ timeout 10 ./disk test 5120 &
 vmstat -dn 1 10 | tail -n +3 | awk {'print $1"\tReads: "$2" operacions read\t"  "Writes: "$6" operacions write"'} >> log.txt
 echo "IOSTAT" >> log.txt
 timeout 10 ./disk test 5120 &
-iostat -d -y 1 10 | tail -n +3 | grep -v -e "^Device" | tr -s '\n' | awk {'print $1"\tReads: "$5" kB\t"  "Writes: "$6 " kB"'} >> log.txt
-
+iostat -d 1 10 | tail -n +3 | grep -v -e "^Device" | tr -s '\n' | awk {'print $1"\tReads: "$5" kB\t"  "Writes: "$6 " kB"'} >> log.txt
+rm -f test
 
 echo "Finished"
 

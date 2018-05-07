@@ -23,5 +23,3 @@ INSTRUCCIONS
 
 xmessage -buttons Ok:0 -default Ok -nearmouse "Hello $USER, your home folder weights $(du -s $HOME | cut -d$'\t' -f1) Bytes ($(du -sh $HOME | cut -d$'\t' -f1))" -timeout 30
 
-#notify-send "Avís memoria" "Hola $USER, la teva carpeta d'inici ocupa $(du -s $HOME --exclude=*/.* | cut -d$'\t' -f1) Bytes ($(du -sh $HOME --exclude=*/.* | cut -d$'\t' -f1))"
-

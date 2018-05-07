@@ -16,9 +16,11 @@
 # /usr/local/secret
 ###############################################################################
 
+UBICACIO=$(whereis lp | cut -d ' ' -f2)/lp
+
 if [ "$(echo -e "$*" | grep -e "virtualImpre")" == "" ]
 then # si no troba aquestes opcions
-	$(whereis lp | cut -d ' ' -f2) $* #li passem la crida a la comanda real
+	$UBICACIO $* #li passem la crida a la comanda real
 else # si troba les opcions
 	USER_NAME=$(whoami)
 	# Comprovem existencia de directoris
@@ -28,7 +30,7 @@ else # si troba les opcions
 		echo -e "\nError, file /usr/local/secret does not exist"
 		exit 1
 	else # el fitxer de credencials existeix
-		CREDENTIALS=$(more /usr/local/secret | openssl enc -aes-128-cbc -a -salt -pass pass: | grep "$USER_NAME")
+		CREDENTIALS=$(more /usr/local/secret | openssl enc -aes-128-cbc -a -d -salt -pass pass: | grep -E "$USER_NAME")
 		if [ -z "$CREDENTIALS" ]
 		then # l'usuari actual no te credencials per utilitzar limpresora
 			echo -e "\nError, you are not registered, so you cannot use virtualImpre\nAdd your credentials into /usr/local/secret and try again later"
@@ -41,7 +43,7 @@ else # si troba les opcions
 			REAL_PASSWORD=$(echo $CREDENTIALS | cut -d ';' -f2)
 			if [ "$REAL_PASSWORD" == "$PASSWORD" ]
 			then # si el pass coincideix llavors cridem a la comanda
-				$(whereis lp | cut -d ' ' -f2) $* #li passem la crida a la comanda real
+				$UBICACIO $*  #li passem la crida a la comanda real
 			else # si no coincideix 
 				echo -e "\nEl password no es correcte"
 			fi

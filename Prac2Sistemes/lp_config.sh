@@ -17,8 +17,8 @@ INSTRUCCIONS
 # Autors: Cristòfol Daudèn, Aleix Marine i Josep Marín Llaó                                           
 # Data d'implementació: 18/4/2018                                                   
 # Versio 1.0                                                                        
-# Permisos:	necessita els permisos per a escriure en la carpeta usr/local, per tant utilitzarem
-# super-usuari.                                   
+# Permisos:	necessita els permisos per a escriure en la carpeta usr/local i per 
+# escriure a /etc/bash.bashrc, pel que necessitarem permisos de root.                                   
 # Descripció i paràmetres: Es vol implementar un script que posi a punt una comanda
 # anomenada lp, que tingui les mateixes opcions que la comanda lp que ja es troba
 # en el sistema pero que quan s'specifiqui el parametre -d acompanyat de virtualImpre
@@ -63,7 +63,6 @@ function ayuda {
 "
 }
 
-getline () { awk -vlnum=${1} 'NR==lnum {print; exit}'; }
 
 PASSWDFILE=/usr/local/secret
 LP_PATH=/usr/local/lp
@@ -90,9 +89,8 @@ fi
 # Modifiquem la variable PATH si cal. Ara buscara la comanda lp en /usr/local/lp en primer lloc
 if [ $(echo $PATH | cut -d ':' -f1) != $LP_PATH ]
 then
-	export PATH="$LP_PATH:$PATH" #TODO la variable path que es modifica es la del usuari que executa l'script (root)
-	echo -e "\nPATH=$PATH" >> $HOME/.bashrc
-	echo -e "\nexport PATH" >> $HOME/.bashrc
+	export PATH="$LP_PATH:$PATH" 
+	echo -e "\nexport PATH=$PATH" >> /etc/bash.bashrc
 fi
 
 # copiem l'script lp a LP_PATH
@@ -118,9 +116,13 @@ do
 	if [ -z $user ] || [ -z $pass ]; then
 		break
 	fi
-	newusers=$(echo "$newusers${NEWLINE}$user;$pass")
+	newusers=$(echo "$newusers
+$user;$pass")
 done
-echo "$newusers" | openssl enc -aes-128-cbc -a -salt -pass pass:$PSW > /usr/local/secret
+
+echo -e "$newusers" >> secret.decrypt
+more secret.decrypt | openssl enc -aes-128-cbc -a -salt -pass pass:$PSW > /usr/local/secret
+rm secret.decrypt
 
 # Afegim el password al script per a pugui desencriptar
 sed -i "s/-pass pass:/-pass pass:$PSW/g" /usr/local/lp/lp
