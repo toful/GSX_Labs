@@ -36,6 +36,7 @@ do
   esac
 done
 
+apt-get update # actualitzem repositoris sino de vegades dona error
 apt-get install openssh-server
 
 case "$1" in
