@@ -81,6 +81,9 @@ function router_config(){
     iptables -I INPUT -j ACCEPT
     iptables -t nat -A POSTROUTING -s 192.168.8.0/23 -j SNAT --to $addres
     iptables -t nat -A POSTROUTING -s 172.17.2.0/24 -j SNAT --to $addres
+    iptables -t nat -A PREROUTING -i $i1 -p tcp --dport 80 -j DNAT --to-destination 172.17.2.2:80
+    iptables -t nat -A PREROUTING -i $i1 -p tcp --dport 443 -j DNAT --to-destination 172.17.2.2:443
+    iptables -t nat -A PREROUTING -i $i1 -p tcp --dport 23 -j DNAT --to-destination 172.17.2.2:22
 
     sed -e '1i nameserver 127.0.0.1' /etc/resolv.conf > resolv.conf
     cp resolv.conf /etc/resolv.conf
