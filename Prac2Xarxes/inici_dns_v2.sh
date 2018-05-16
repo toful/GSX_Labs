@@ -66,6 +66,9 @@ function router_config(){
     cp db.192.168.8 /var/cache/bind/db.192.168.8
     cp db.172 /var/cache/bind/db.172
 
+    cp db.externa /var/cache/bind/db.externa
+    cp externa.db /var/cache/bind/externa.db
+
     cp db.192.168.250 /var/cache/bind/db.192.168.250
     cp VLAN.db /var/cache/bind/VLAN.db
 
@@ -76,6 +79,7 @@ function router_config(){
 
     #obtenim la ip amb conexio a internet del router
     addres=$(hostname -I | cut -d ' ' -f1) 
+    echo "Comprovar que la IP esterna és $addres"
 
     #permetem el tràfic cap a l'exterior
     iptables -I INPUT -j ACCEPT
@@ -174,15 +178,15 @@ done
 
 case "$1" in
     router)
-        router_config
+        router_config $*
         exit 0
         ;;
     client)
-        client_config
+        client_config $*
         exit 0
         ;;
     server)
-        server_config
+        server_config $*
         exit 0
         ;;
     *)

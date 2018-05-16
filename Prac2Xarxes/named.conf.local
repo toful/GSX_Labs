@@ -5,8 +5,8 @@
 #	recursion no; 					#yes perquè funcionin els externs
 #};
 
-view internal{
-	match-clients { 192.168.8.0/23; localhost: };
+view "internal"{
+	match-clients { 192.168.8.0/23; localhost; };
 	recursion yes;
 
 	zone "interna" {
