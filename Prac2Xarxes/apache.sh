@@ -10,4 +10,5 @@ cp html_files/taller.conf /etc/apache2/sites-available/taller.conf
 cp html_files/tenda.conf /etc/apache2/sites-available/tenda.conf
 
 
+service apache2 restart
 
