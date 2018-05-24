@@ -49,7 +49,7 @@ view "internal"{
 
 view "DMZ"{
 	match-clients { 172.17.2.0/24; };
-	recursion no;
+	recursion yes;
 
 	zone "grup2.gsx" {
 		type master;
