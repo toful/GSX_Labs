@@ -6,21 +6,6 @@ will install and configure openssh-server.
 	"
 }
 
-function router_config()
-{
-	echo .
-}
-
-function client_config()
-{
-	apt-get install openssh-client
-}
-
-function server_config()
-{
-	echo .	
-}
-
 while getopts :h option
 do
 	case "$option" in
@@ -41,15 +26,13 @@ apt-get install openssh-server
 
 case "$1" in
 	router)
-		router_config
 		exit 0
 	   	;;
 	server)
-		server_config
 		exit 0
 		;;
 	client)
-		client_config
+        apt-get install openssh-client
 		exit 0
 		;;
 	*)

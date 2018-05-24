@@ -5,8 +5,8 @@
 #	recursion no; 					#yes perquè funcionin els externs
 #};
 
-view internal{
-	match-clients { 192.168.8.0/23; localhost: };
+view "internal"{
+	match-clients { 192.168.8.0/23; localhost; };
 	recursion yes;
 
 	zone "interna" {
@@ -49,7 +49,7 @@ view internal{
 
 view "DMZ"{
 	match-clients { 172.17.2.0/24; };
-	recursion no;
+	recursion yes;
 
 	zone "grup2.gsx" {
 		type master;
