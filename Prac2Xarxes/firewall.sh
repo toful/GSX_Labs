@@ -73,7 +73,6 @@ function dmz_firewall(){
     
 	/etc/init.d/bind9 restart
 	
-
 }
 
 
