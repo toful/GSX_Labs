@@ -69,7 +69,7 @@ function dmz_firewall(){
 	iptables -P FORWARD DROP
 	
 	#Permetem les respostes, mitjançant configuració statefull
-	iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
     
 	/etc/init.d/bind9 restart
 	
