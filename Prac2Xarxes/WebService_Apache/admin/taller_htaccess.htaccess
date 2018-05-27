@@ -1,0 +1,13 @@
+  #Per protegir l’accés general a tot el site
+AuthType Basic
+AuthName "Zona Privada. Si us plau introduiu el password."
+AuthUserFile "/var/www/html/taller/admin/.htpasswd"
+Require valid-user
+
+#Per protegir un fitxer concret
+# <FilesMatch "guarda_web.sh">
+# AuthType Basic
+# AuthName "Zona Privada. Si us plau introduiu el password."
+# AuthUserFile "/var/www/html/taller/admin/.htpasswd"
+# Require valid-user
+# </FilesMatch>
