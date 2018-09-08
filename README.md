@@ -1,7 +1,7 @@
 # GSX_Labs
 Networking and Systems Management Labs
 
-In this repository there are many bash scripts for computer configuration.
+In this repository there are many bash scripts for system and network configuration for Debian.
 
 ## Authors
 
